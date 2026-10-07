@@ -125,7 +125,7 @@ export default function Footer() {
                   className="flex items-start gap-3 text-sm text-muted hover:text-gold-bright transition-colors duration-200 group break-all"
                 >
                   <Mail className="w-4 h-4 mt-0.5 text-violet-bright group-hover:text-gold-bright transition-colors shrink-0" />
-                  info@saibabaastro.com
+                  info@saibabaastro.store
                 </a>
               </li>
               <li>
