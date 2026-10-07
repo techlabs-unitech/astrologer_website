@@ -1,0 +1,371 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS custom properties ─────────────────────────────────────────────────── */
+:root {
+  --bg-primary:    #07060f;
+  --bg-secondary:  #0d0b1e;
+  --bg-section:    #0f0d2a;
+  --bg-card:       #13103a;
+
+  --accent-violet: #6b46c1;
+  --accent-violet-bright: #8b5cf6;
+  --accent-gold:   #d97706;
+  --accent-gold-bright: #f59e0b;
+
+  --text-primary:  #f5f0e8;
+  --text-secondary: #cbd5e1;
+  --text-muted:    #94a3b8;
+
+  --border-subtle: rgba(107, 70, 193, 0.25);
+  --border-card:   rgba(42, 32, 96, 0.8);
+
+  --glow-violet:   rgba(107, 70, 193, 0.4);
+  --glow-gold:     rgba(217, 119, 6, 0.4);
+}
+
+/* ─── Base reset & defaults ─────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings use the serif display stack */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+
+  /* Accessible focus ring */
+  :focus-visible {
+    outline: 2px solid var(--accent-gold-bright);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Selection colour */
+  ::selection {
+    background-color: rgba(107, 70, 193, 0.4);
+    color: #f5f0e8;
+  }
+
+  /* Scrollbar styling (Webkit) */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0d0b1e;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(107, 70, 193, 0.5);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(107, 70, 193, 0.8);
+  }
+
+  /* Anchor defaults */
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  /* Image defaults */
+  img, svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Button cursor */
+  button {
+    cursor: pointer;
+  }
+}
+
+/* ─── Star / cosmic background ──────────────────────────────────────────────── */
+@layer base {
+  /* The starfield is painted on a pseudo-element so it sits behind all content */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-color: var(--bg-primary);
+
+    /* Layer 1: tiny bright stars */
+    /* Layer 2: medium stars */
+    /* Layer 3: large sparse stars */
+    background-image:
+      radial-gradient(1px 1px at 15%  8%,  rgba(255,255,255,0.9) 0%, transparent 100%),
+      radial-gradient(1px 1px at 42%  3%,  rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 73% 12%,  rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 88%  5%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at  6% 22%,  rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 31% 18%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 58% 27%,  rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 79% 33%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 94% 41%,  rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 23% 47%,  rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 51% 53%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 67% 61%,  rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at  9% 68%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 84% 72%,  rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 37% 79%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 62% 85%,  rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 19% 91%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 46% 96%,  rgba(255,255,255,0.4) 0%, transparent 100%),
+      /* Medium stars */
+      radial-gradient(2px 2px at 25% 15%,  rgba(200,180,255,0.6) 0%, transparent 100%),
+      radial-gradient(2px 2px at 71% 22%,  rgba(200,180,255,0.5) 0%, transparent 100%),
+      radial-gradient(2px 2px at 48% 44%,  rgba(255,220,180,0.5) 0%, transparent 100%),
+      radial-gradient(2px 2px at 89% 58%,  rgba(200,180,255,0.6) 0%, transparent 100%),
+      radial-gradient(2px 2px at 12% 75%,  rgba(255,220,180,0.4) 0%, transparent 100%),
+      radial-gradient(2px 2px at 55% 88%,  rgba(200,180,255,0.5) 0%, transparent 100%),
+      /* Large sparse stars */
+      radial-gradient(3px 3px at 35% 10%,  rgba(255,240,200,0.7) 0%, transparent 100%),
+      radial-gradient(3px 3px at 80% 45%,  rgba(200,180,255,0.6) 0%, transparent 100%),
+      radial-gradient(3px 3px at 10% 60%,  rgba(255,240,200,0.5) 0%, transparent 100%),
+      radial-gradient(3px 3px at 65% 78%,  rgba(200,180,255,0.7) 0%, transparent 100%),
+      /* Nebula glow from top */
+      radial-gradient(ellipse 60% 40% at 50% 0%,  rgba(107,70,193,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 80% 20%, rgba(217,119,6,0.07)  0%, transparent 60%),
+      radial-gradient(ellipse 50% 35% at 15% 70%, rgba(107,70,193,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Subtle purple vignette overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse 100% 100% at 50% 50%,
+      transparent 40%,
+      rgba(7, 6, 15, 0.6) 100%
+    );
+    pointer-events: none;
+  }
+}
+
+/* ─── Reusable component utilities ─────────────────────────────────────────── */
+@layer components {
+
+  /* ── Buttons ─────────────────────────────────────────────────────────────── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           rounded-full px-7 py-3
+           bg-gradient-to-r from-gold to-gold-bright
+           text-cosmic-black font-semibold text-sm tracking-wide
+           shadow-glow-gold
+           transition-all duration-300 ease-out
+           hover:scale-105 hover:shadow-[0_0_28px_6px_rgba(217,119,6,0.5)]
+           active:scale-95
+           focus-visible:outline-gold-bright;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           rounded-full px-7 py-3
+           border border-violet-bright/60
+           text-violet-glow font-semibold text-sm tracking-wide
+           backdrop-blur-sm
+           transition-all duration-300 ease-out
+           hover:bg-violet/20 hover:border-violet-bright hover:scale-105
+           active:scale-95
+           focus-visible:outline-gold-bright;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2
+           rounded-full px-6 py-2.5
+           text-silver font-medium text-sm
+           transition-all duration-200 ease-out
+           hover:text-cream hover:bg-white/5
+           active:scale-95
+           focus-visible:outline-gold-bright;
+  }
+
+  /* ── Cards ───────────────────────────────────────────────────────────────── */
+  .card-cosmic {
+    @apply relative rounded-2xl
+           bg-card-gradient border border-cosmic-border
+           shadow-card
+           backdrop-blur-sm
+           transition-all duration-300
+           hover:shadow-card-hover hover:border-violet/40 hover:-translate-y-1;
+  }
+
+  .card-feature {
+    @apply card-cosmic p-6;
+  }
+
+  /* ── Section containers ──────────────────────────────────────────────────── */
+  .section-dark {
+    @apply bg-section-dark;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  /* ── Dividers ─────────────────────────────────────────────────────────────── */
+  .divider-gold {
+    @apply block h-px w-full bg-gradient-to-r from-transparent via-gold to-transparent opacity-50;
+  }
+
+  .divider-violet {
+    @apply block h-px w-full bg-gradient-to-r from-transparent via-violet to-transparent opacity-40;
+  }
+
+  /* ── Text utilities ──────────────────────────────────────────────────────── */
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-transparent;
+  }
+
+  .text-gradient-violet {
+    @apply bg-gradient-to-r from-violet-bright to-violet-glow bg-clip-text text-transparent;
+  }
+
+  .heading-serif {
+    @apply font-serif text-cream;
+  }
+
+  /* ── Glow decorators ─────────────────────────────────────────────────────── */
+  .glow-dot {
+    @apply inline-block w-1.5 h-1.5 rounded-full bg-gold-bright shadow-glow-gold;
+  }
+
+  /* ── Form inputs ──────────────────────────────────────────────────────────── */
+  .input-cosmic {
+    @apply w-full rounded-lg px-4 py-3
+           bg-cosmic-card border border-cosmic-border
+           text-cream placeholder:text-muted text-sm
+           transition-all duration-200
+           focus:outline-none focus:border-violet-bright focus:shadow-glow-sm
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .label-cosmic {
+    @apply block text-sm font-medium text-silver mb-1.5;
+  }
+
+  /* ── Badge ─────────────────────────────────────────────────────────────────  */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-gold {
+    @apply badge bg-gold/20 text-gold-bright border border-gold/30;
+  }
+
+  .badge-violet {
+    @apply badge bg-violet/20 text-violet-glow border border-violet/30;
+  }
+
+  /* ── Zodiac ring decoration ─────────────────────────────────────────────── */
+  .zodiac-ring {
+    @apply absolute rounded-full border border-violet/20 pointer-events-none;
+    animation: rotate-slow 30s linear infinite;
+  }
+}
+
+/* ─── Utility overrides & helpers ────────────────────────────────────────────  */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-cosmic-deep {
+    background-color: var(--bg-secondary);
+  }
+
+  .bg-cosmic-card {
+    background-color: var(--bg-card);
+  }
+
+  /* Glass morphism panel */
+  .glass {
+    background: rgba(19, 16, 58, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(107, 70, 193, 0.2);
+  }
+
+  /* Noise texture overlay helper */
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.04;
+    border-radius: inherit;
+  }
+
+  /* Smooth fade-in for page transitions */
+  .animate-in {
+    animation: fade-up 0.6s ease-out forwards;
+  }
+
+  /* Staggered children delay helpers */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+}
+
+/* ─── Light theme ─────────────────────────────────────────────────────────── */
+html[data-theme='light'] {
+  --bg-primary: #f7f4ef;
+  --bg-secondary: #fffdf9;
+  --bg-section: #eeeaf7;
+  --bg-card: #ffffff;
+  --text-primary: #211b35;
+  --text-secondary: #4b5563;
+  --text-muted: #667085;
+  --border-subtle: rgba(107, 70, 193, 0.2);
+  --border-card: rgba(107, 70, 193, 0.22);
+}
+
+html[data-theme='light'] body::before {
+  opacity: 0.12;
+}
+
+html[data-theme='light'] body::after {
+  background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(255, 255, 255, 0.42) 100%);
+}
+
+html[data-theme='light'] .bg-cosmic-deep { background-color: var(--bg-secondary); }
+html[data-theme='light'] .bg-cosmic-card { background-color: var(--bg-card); }
+html[data-theme='light'] .bg-section-dark { background: linear-gradient(180deg, #fffdf9 0%, #eeeaf7 100%); }
+html[data-theme='light'] .text-cream { color: #211b35; }
+html[data-theme='light'] .text-silver { color: #4b5563; }
+html[data-theme='light'] .text-muted { color: #667085; }
+html[data-theme='light'] .border-cosmic-border { border-color: rgba(107, 70, 193, 0.22); }
+html[data-theme='light'] .card-cosmic { background: #ffffff; box-shadow: 0 4px 24px rgba(42, 32, 96, 0.1); }
+html[data-theme='light'] .glass { background: rgba(255, 255, 255, 0.78); border-color: rgba(107, 70, 193, 0.2); }
+html[data-theme='light'] .input-cosmic { color: #211b35; background: #ffffff; }
+html[data-theme='light'] .btn-ghost:hover { background: rgba(107, 70, 193, 0.08); }
