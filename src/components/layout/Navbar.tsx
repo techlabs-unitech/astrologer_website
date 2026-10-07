@@ -2,9 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+<<<<<<< HEAD
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Menu, X, Languages, Sun, Moon } from 'lucide-react'
+=======
+import { usePathname } from 'next/navigation'
+import { Menu, X, Star, Languages, Sun, Moon } from 'lucide-react'
+>>>>>>> 8f4e63506aa1c8be07df8c5103e0677c8b136e1e
 import { useLanguage } from '@/components/LanguageProvider'
 import { useTheme } from '@/components/ThemeProvider'
 
@@ -54,6 +59,7 @@ export default function Navbar() {
             href="/"
             className="flex items-center gap-2.5 group focus-visible:outline-gold-bright"
           >
+<<<<<<< HEAD
             <div className="relative w-12 h-12 sm:w-14 sm:h-14">
               <Image
                 src="/images/logo.png"
@@ -66,6 +72,17 @@ export default function Navbar() {
             <span className="font-serif text-xl sm:text-2xl font-bold tracking-wide whitespace-nowrap">
               <span className="text-cream">Saibaba</span>
               <span className="text-gradient-gold"> Astro</span>
+=======
+            <span
+              className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-violet to-gold shadow-glow-sm group-hover:shadow-glow-gold transition-all duration-300"
+              aria-hidden="true"
+            >
+              <Star className="w-4 h-4 text-cosmic-black fill-current" />
+            </span>
+            <span className="font-serif text-lg sm:text-xl font-bold tracking-wide whitespace-nowrap">
+              <span className="text-cream">SaiBaba</span>
+              <span className="text-gradient-gold">Astro</span>
+>>>>>>> 8f4e63506aa1c8be07df8c5103e0677c8b136e1e
             </span>
           </Link>
 
@@ -166,6 +183,7 @@ export default function Navbar() {
   </Link>
 </div>
 
+<<<<<<< HEAD
           {/* ── Mobile controls ─────────────────────────────────────────────── */}
           <div className="md:hidden flex items-center gap-2">
             {/* Language selector */}
@@ -230,6 +248,19 @@ export default function Navbar() {
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
+=======
+          {/* ── Mobile menu toggle ────────────────────────────────────────── */}
+          <button
+            type="button"
+            onClick={() => setIsOpen((prev) => !prev)}
+            className="md:hidden flex items-center justify-center w-10 h-10 rounded-full border border-cosmic-border text-silver hover:text-cream hover:border-violet/40 transition-all duration-200 focus-visible:outline-gold-bright"
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+          >
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+>>>>>>> 8f4e63506aa1c8be07df8c5103e0677c8b136e1e
         </div>
       </nav>
 
