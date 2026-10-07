@@ -134,12 +134,12 @@ export default function Footer() {
                   className="flex items-start gap-3 text-sm text-muted hover:text-gold-bright transition-colors duration-200 group"
                 >
                   <Phone className="w-4 h-4 mt-0.5 text-violet-bright group-hover:text-gold-bright transition-colors shrink-0" />
-                  +91 12345 67890
+                  +91 99720 49339
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-muted">
                 <MapPin className="w-4 h-4 mt-0.5 text-violet-bright shrink-0" />
-                123 Cosmic Lane, New Delhi, India
+                NO 13/7, Guttapalya Village, Gownipalli Post, Chintamani Taluk, Chikkaballapura District, Karnataka - 563161
               </li>
             </ul>
 
@@ -156,7 +156,7 @@ export default function Footer() {
 
         {/* ── Bottom bar ───────────────────────────────────────────────────── */}
         <div className="border-t border-cosmic-border py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
-          <p>© {year} SaiBabaAstro. All rights reserved.</p>
+          <p>© {year} SaiBabaAstro. All rights reserved | Design by Unitechlabs</p>
           <p className="flex items-center gap-1">
             {t.home.practical} 
             <Star className="w-3 h-3 text-gold-bright fill-current mx-0.5" aria-hidden="true" />
