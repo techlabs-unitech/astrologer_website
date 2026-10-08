@@ -169,8 +169,8 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                   ))}
                 </div>
                 <div className="text-center">
-                  <p className="text-gold-bright font-semibold text-sm mb-1">ಜ್ಯೋತಿಷ್ಯ ವಿಭೂಷಣ</p>
-                  <p className="text-silver text-xs">ಡಾ|| ಶ್ರೀಮತಿ ಸುಜಾತ ಮಲ್ಲುರಾಜ ಎನ್‌.ಆ‌ರ್.</p>
+                  <p className="text-gold-bright font-semibold text-sm mb-1">ಜ್ಯೋತಿಷ್ಯ ರತ್ನ</p>
+                  <p className="text-silver text-xs">ಡಾ|| ಶ್ರೀಸಾಯಿ ಸ್ವಾಮಿ ಮಲ್ಲುರಾಜ ಎನ್‌.ಆ‌ರ್</p>
                 </div>
               </div>
 
@@ -212,8 +212,8 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                   ))}
                 </div>
                 <div className="text-center">
-                  <p className="text-gold-bright font-semibold text-sm mb-1">ಜ್ಯೋತಿಷ್ಯ ರತ್ನ</p>
-                  <p className="text-silver text-xs">ಡಾ|| ಶ್ರೀಸಾಯಿ ಸ್ವಾಮಿ ಮಲ್ಲುರಾಜ ಎನ್‌.ಆ‌ರ್.</p>
+                  <p className="text-gold-bright font-semibold text-sm mb-1">ಜ್ಯೋತಿಷ್ಯ ವಿಭೂಷಣ</p>
+                  <p className="text-silver text-xs">ಡಾ|| ಶ್ರೀಮತಿ ಸುಜಾತ ಮಲ್ಲುರಾಜ ಎನ್‌.ಆ‌ರ್.</p>
                 </div>
               </div>
             </div>
