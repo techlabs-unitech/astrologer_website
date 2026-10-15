@@ -42,7 +42,7 @@ const CONTACT_INFO = [
   {
     icon: MapPin,
     label: 'Location',
-    primary: 'New Delhi, India',
+    primary: 'Chintamani Taluk, Chikkaballapura District, Karnataka - 563161',
     secondary: 'In-person & remote sessions',
     href: null,
     color: 'from-violet-bright to-violet-glow',
