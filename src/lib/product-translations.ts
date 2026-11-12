@@ -1,11 +1,11 @@
 /**
  * Kannada and Telugu text for the shop's products.
  *
- * The products table only stores English (it has no name_kn / name_te /
- * description_kn / description_te columns), so these translations live in
- * code, keyed by product id. Nothing in the shared database is changed.
- * If translation columns are added later, values stored there take priority
- * (see localizeProduct in ./localize.ts).
+ * Keyed by product id. These were copied into the products table's name_kn /
+ * name_te / description_kn / description_te columns on 2026-11-12, and values
+ * stored there take priority (see localizeProduct in ./localize.ts), so edits
+ * made in the admin panel win. This file is the fallback for any product
+ * whose columns are empty.
  *
  * Drafted for review by a native speaker before launch.
  */
