@@ -24,7 +24,7 @@ export const translations = {
 
     home: {
       eyebrow: 'ಜ್ಯೋತಿಷ್ಯ • ಮಾರ್ಗದರ್ಶನ • ಒಳನೋಟ',
-      title: 'ನಕ್ಷತ್ರಗಳು ನಿಮಗಾಗಿ ಏನು ಕಾಯ್ದಿರಿಸಿವೆ ಎಂಬುದನ್ನು ಕಂಡುಕೊಳ್ಳಿ',
+      title: 'ನಕ್ಷತ್ರಗಳು ಮತ್ತು ಗ್ರಹಗಳು ನಿಮಗಾಗಿ ಏನು ಕಾಯ್ದಿರಿಸಿವೆ ಎಂಬುದನ್ನು ಕಂಡುಕೊಳ್ಳಿ',
       description:
         'ಪ್ರೀತಿ, ವೃತ್ತಿ, ಸಂಬಂಧಗಳು ಮತ್ತು ಜೀವನದ ಪ್ರಮುಖ ನಿರ್ಧಾರಗಳಿಗಾಗಿ ವೈಯಕ್ತಿಕ ಜ್ಯೋತಿಷ್ಯ ಮಾರ್ಗದರ್ಶನವನ್ನು ಪಡೆಯಿರಿ — ನಿಜವಾದ ವೈದಿಕ ಜ್ಯೋತಿಷ್ಯ ಪರಂಪರೆಯನ್ನು ಆಧರಿಸಿ.',
       bookConsultation: 'ಸಮಾಲೋಚನೆ ಬುಕ್ ಮಾಡಿ',
@@ -463,7 +463,7 @@ export const translations = {
 
     home: {
       eyebrow: 'Astrology • Guidance • Insight',
-      title: 'Discover What the Stars Have in Store for You',
+      title: 'Discover What the Stars and Planets Have in Store for You',
       description:
         'Get personalised astrological guidance for love, career, relationships, and life’s most important decisions — rooted in authentic Vedic Jyotish tradition.',
       bookConsultation: 'Book a Consultation',
@@ -778,7 +778,7 @@ export const translations = {
 
     home: {
       eyebrow: 'జ్యోతిష్యం • మార్గదర్శకత్వం • అంతర్దృష్టి',
-      title: 'నక్షత్రాలు మీ కోసం ఏమి దాచిపెట్టాయో తెలుసుకోండి',
+      title: 'నక్షత్రాలు మరియు గ్రహాలు మీ కోసం ఏమి దాచిపెట్టాయో తెలుసుకోండి',
       description:
         'ప్రేమ, కెరీర్, సంబంధాలు మరియు జీవితంలోని ముఖ్యమైన నిర్ణయాల కోసం ప్రామాణిక వైదిక జ్యోతిష్య సంప్రదాయంపై ఆధారపడిన వ్యక్తిగత మార్గదర్శకత్వాన్ని పొందండి.',
       bookConsultation: 'సంప్రదింపును బుక్ చేయండి',
