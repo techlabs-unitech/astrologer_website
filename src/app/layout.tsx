@@ -1,12 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import {
-  Baloo_Tamma_2,
-  Baloo_Tammudu_2,
-  Cormorant_Garamond,
-  Inter,
-  Noto_Sans_Kannada,
-  Noto_Sans_Telugu,
-} from 'next/font/google'
+import localFont from 'next/font/local'
 import { Navbar } from '@/components/layout'
 import { Footer } from '@/components/layout'
 import { LanguageProvider } from '@/components/LanguageProvider'
@@ -16,41 +9,102 @@ import WhatsAppButton from '@/components/WhatsAppButton'
 import './globals.css'
 
 // ─── Fonts ──────────────────────────────────────────────────────────────────
-// Self-hosted by next/font at build time (no runtime request to Google).
+// Self-hosted from src/app/fonts (variable WOFF2 files from Google Fonts, OFL),
+// so builds never fetch from Google — that fetch broke Vercel builds.
 // Latin: Inter (text) + Cormorant Garamond (headings).
 // Kannada / Telugu: Noto Sans (text) + Baloo Tamma 2 / Baloo Tammudu 2 (headings).
+// Each face carries its subset's unicode-range, so browsers only download the
+// Kannada or Telugu files on pages that actually contain those scripts.
+// (next/font only accepts literal options, hence the repeated ranges.)
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
-  style: ['normal', 'italic'],
+const inter = localFont({
+  src: './fonts/inter-latin.woff2',
+  weight: '100 900',
+  variable: '--font-inter',
+  display: 'swap',
+  declarations: [
+    {
+      prop: 'unicode-range',
+      value:
+        'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD',
+    },
+  ],
+})
+const cormorant = localFont({
+  src: [
+    { path: './fonts/cormorant-latin.woff2', weight: '500 700', style: 'normal' },
+    { path: './fonts/cormorant-latin-italic.woff2', weight: '500 700', style: 'italic' },
+  ],
   variable: '--font-cormorant',
   display: 'swap',
+  adjustFontFallback: 'Times New Roman',
+  declarations: [
+    {
+      prop: 'unicode-range',
+      value:
+        'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD',
+    },
+  ],
 })
-const notoKannada = Noto_Sans_Kannada({
-  subsets: ['kannada'],
-  weight: ['400', '500', '600'],
+// Kannada is the default site language, so its faces are preloaded; Telugu
+// faces load on demand.
+const notoKannada = localFont({
+  src: './fonts/noto-sans-kannada.woff2',
+  weight: '400 600',
   variable: '--font-noto-kannada',
   display: 'swap',
+  adjustFontFallback: false,
+  declarations: [
+    {
+      prop: 'unicode-range',
+      value:
+        'U+0951-0952, U+0964-0965, U+0B83, U+0C80-0CF3, U+1CD0, U+1CD2-1CD3, U+1CDA, U+1CF2, U+1CF4, U+200C-200D, U+20B9, U+25CC, U+A830-A835',
+    },
+  ],
 })
-const notoTelugu = Noto_Sans_Telugu({
-  subsets: ['telugu'],
-  weight: ['400', '500', '600'],
+const notoTelugu = localFont({
+  src: './fonts/noto-sans-telugu.woff2',
+  weight: '400 600',
   variable: '--font-noto-telugu',
   display: 'swap',
+  preload: false,
+  adjustFontFallback: false,
+  declarations: [
+    {
+      prop: 'unicode-range',
+      value:
+        'U+0951-0952, U+0964-0965, U+0B83, U+0C00-0C7F, U+1CD5-1CD6, U+1CD8, U+1CDA, U+1CF2, U+200C-200D, U+25CC',
+    },
+  ],
 })
-const balooKannada = Baloo_Tamma_2({
-  subsets: ['kannada'],
-  weight: ['600', '700', '800'],
+const balooKannada = localFont({
+  src: './fonts/baloo-tamma-2-kannada.woff2',
+  weight: '600 800',
   variable: '--font-baloo-kannada',
   display: 'swap',
+  adjustFontFallback: false,
+  declarations: [
+    {
+      prop: 'unicode-range',
+      value:
+        'U+0951-0952, U+0964-0965, U+0B83, U+0C80-0CF3, U+1CD0, U+1CD2-1CD3, U+1CDA, U+1CF2, U+1CF4, U+200C-200D, U+20B9, U+25CC, U+A830-A835',
+    },
+  ],
 })
-const balooTelugu = Baloo_Tammudu_2({
-  subsets: ['telugu'],
-  weight: ['600', '700', '800'],
+const balooTelugu = localFont({
+  src: './fonts/baloo-tammudu-2-telugu.woff2',
+  weight: '600 800',
   variable: '--font-baloo-telugu',
   display: 'swap',
+  preload: false,
+  adjustFontFallback: false,
+  declarations: [
+    {
+      prop: 'unicode-range',
+      value:
+        'U+0951-0952, U+0964-0965, U+0B83, U+0C00-0C7F, U+1CD5-1CD6, U+1CD8, U+1CDA, U+1CF2, U+200C-200D, U+25CC',
+    },
+  ],
 })
 
 const fontVariables = [inter, cormorant, notoKannada, notoTelugu, balooKannada, balooTelugu]
