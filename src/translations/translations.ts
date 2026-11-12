@@ -196,7 +196,7 @@ export const translations = {
       featuredTitle: 'ನಿಮ್ಮ ಆಧ್ಯಾತ್ಮಿಕ ಪಯಣಕ್ಕಾಗಿ',
       featuredHighlight: 'ವಿಶೇಷ ಉತ್ಪನ್ನಗಳು',
       featuredSubtitle:
-        'ರತ್ನಗಳು, ಯಂತ್ರಗಳು ಮತ್ತು ವಾಸ್ತು ಪರಿಹಾರಗಳ ಆಯ್ದ ಸಂಗ್ರಹ — ನಿಮ್ಮ ಅಭ್ಯಾಸಕ್ಕೆ ಸಹಾಯ ಮಾಡಲು ಎಚ್ಚರಿಕೆಯಿಂದ ಆರಿಸಲಾಗಿದೆ.',
+        'ನಿಮ್ಮ ರಾಶಿಗೆ ಹೊಂದುವ ರತ್ನದ ಮಣಿ ಬ್ರೇಸ್ಲೆಟ್‌ಗಳು — ನಿಮ್ಮ ಅಭ್ಯಾಸಕ್ಕೆ ಸಹಾಯ ಮಾಡಲು ಎಚ್ಚರಿಕೆಯಿಂದ ಆರಿಸಲಾಗಿದೆ.',
 
       chartTitle: 'ರಾಶಿ ಚಕ್ರ',
       chartSubtitle: 'ದಕ್ಷಿಣ ಭಾರತೀಯ ಕುಂಡಲಿ',
@@ -596,7 +596,7 @@ export const translations = {
       featuredTitle: 'Featured Products for Your',
       featuredHighlight: 'Spiritual Journey',
       featuredSubtitle:
-        'A curated selection of gemstones, yantras, and Vastu remedies — thoughtfully chosen to support your practice.',
+        'Zodiac gemstone bead bracelets, matched to your rashi — thoughtfully chosen to support your practice.',
 
       chartTitle: 'Rashi Chakra',
       chartSubtitle: 'South Indian chart',
@@ -911,7 +911,7 @@ export const translations = {
       featuredTitle: 'మీ ఆధ్యాత్మిక ప్రయాణం కోసం',
       featuredHighlight: 'ప్రత్యేక ఉత్పత్తులు',
       featuredSubtitle:
-        'రత్నాలు, యంత్రాలు మరియు వాస్తు పరిష్కారాల ఎంపిక చేసిన సేకరణ — మీ సాధనకు తోడ్పడేలా జాగ్రత్తగా ఎంచుకోబడింది.',
+        'మీ రాశికి సరిపోయే రత్నాల పూసల బ్రేస్‌లెట్‌లు — మీ సాధనకు తోడ్పడేలా జాగ్రత్తగా ఎంచుకోబడ్డాయి.',
 
       chartTitle: 'రాశి చక్రం',
       chartSubtitle: 'దక్షిణ భారత కుండలి',

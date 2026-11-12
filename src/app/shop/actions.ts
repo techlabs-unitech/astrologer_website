@@ -46,13 +46,26 @@ export async function getActiveProducts(): Promise<ShopProductResult> {
   }
 }
 
+/** Zodiac order for sorting the bead bracelets (matched against the English name). */
+const ZODIAC_ORDER = [
+  'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
+  'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces',
+]
+
+function zodiacRank(name: string): number {
+  const lower = name.toLowerCase()
+  const index = ZODIAC_ORDER.findIndex((sign) => lower.startsWith(sign))
+  return index === -1 ? ZODIAC_ORDER.length : index
+}
+
 /**
- * Fetch a small set of active shop products for the homepage
- * "Featured Products" carousel. Falls back to an empty array (the
- * carousel section simply doesn't render) when Supabase isn't configured
- * or the catalogue is empty.
+ * Fetch the active bead bracelets (category `gemstone`) for the homepage
+ * "Featured Products" carousel, in zodiac order (Aries → Pisces). Vastu,
+ * yantra and puja items stay in the shop only. Falls back to an empty array
+ * (the carousel section simply doesn't render) when Supabase isn't configured
+ * or there are no gemstone products.
  */
-export async function getFeaturedProducts(limit = 8): Promise<ShopProductResult> {
+export async function getFeaturedProducts(limit = 12): Promise<ShopProductResult> {
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -66,16 +79,19 @@ export async function getFeaturedProducts(limit = 8): Promise<ShopProductResult>
       .from('products')
       .select('*')
       .eq('active', true)
-      .not('category', 'in', '(consultation,report,relationship,career)')
-      .order('created_at', { ascending: true })
-      .limit(limit)
+      .eq('category', 'gemstone')
+      .order('name', { ascending: true })
 
     if (error) {
       console.error('[getFeaturedProducts]', error.message)
       return { success: false, error: 'Failed to load featured products.' }
     }
 
-    return { success: true, data: (data ?? []) as Product[] }
+    const products = ((data ?? []) as Product[])
+      .sort((a, b) => zodiacRank(a.name) - zodiacRank(b.name))
+      .slice(0, limit)
+
+    return { success: true, data: products }
   } catch (err) {
     console.error('[getFeaturedProducts] unexpected:', err)
     return { success: false, error: 'An unexpected error occurred.' }

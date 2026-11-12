@@ -4,7 +4,7 @@ import { getFeaturedProducts } from '@/app/shop/actions'
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const result = await getFeaturedProducts(8)
+  const result = await getFeaturedProducts()
   const featuredProducts = result.success ? result.data : []
 
   return <HomeContent featuredProducts={featuredProducts} />
