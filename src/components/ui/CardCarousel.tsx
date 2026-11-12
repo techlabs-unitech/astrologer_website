@@ -10,6 +10,20 @@ import {
 } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
+/**
+ * scrollLeft that puts `child` at the track's snap start, honouring the
+ * track's scroll-padding (scroll-px-4 on mobile).
+ */
+function slideScrollLeft(track: HTMLElement, child: HTMLElement): number {
+  const padding = parseFloat(getComputedStyle(track).scrollPaddingLeft) || 0
+  return (
+    child.getBoundingClientRect().left -
+    track.getBoundingClientRect().left +
+    track.scrollLeft -
+    padding
+  )
+}
+
 export interface CardCarouselLabels {
   /** Accessible name for the whole carousel region */
   region: string
@@ -46,6 +60,10 @@ export default function CardCarousel({
 }: CardCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  // Last slide the track can actually scroll to the start of. When several
+  // cards are visible, the final few can never reach the start position, so
+  // the arrows, dots and keys only step through 0…lastStop.
+  const [lastStop, setLastStop] = useState(slides.length - 1)
   const [canPrev, setCanPrev] = useState(false)
   const [canNext, setCanNext] = useState(false)
   const [hasOverflow, setHasOverflow] = useState(true)
@@ -60,25 +78,30 @@ export default function CardCarousel({
     setCanPrev(left > 2)
     setCanNext(left < maxScroll - 2)
 
-    // At the far end the last card may never reach the snap start position,
-    // so treat "scrolled to the end" as the last slide.
+    const targets = (Array.from(track.children) as HTMLElement[]).map((child) =>
+      slideScrollLeft(track, child),
+    )
+    const firstAtEnd = targets.findIndex((target) => target >= maxScroll - 2)
+    const stop = firstAtEnd === -1 ? targets.length - 1 : firstAtEnd
+    setLastStop(stop)
+
+    // Scrolled to the far end: that is the last reachable position.
     if (left >= maxScroll - 2 && maxScroll > 2) {
-      setActiveIndex(slides.length - 1)
+      setActiveIndex(stop)
       return
     }
 
-    const children = Array.from(track.children) as HTMLElement[]
     let closest = 0
     let best = Number.POSITIVE_INFINITY
-    children.forEach((child, index) => {
-      const distance = Math.abs(child.offsetLeft - track.offsetLeft - left)
+    targets.slice(0, stop + 1).forEach((target, index) => {
+      const distance = Math.abs(target - left)
       if (distance < best) {
         best = distance
         closest = index
       }
     })
     setActiveIndex(closest)
-  }, [slides.length])
+  }, [])
 
   useEffect(() => {
     const track = trackRef.current
@@ -100,13 +123,14 @@ export default function CardCarousel({
       track.removeEventListener('scroll', onScroll)
       observer.disconnect()
     }
-  }, [measure])
+    // slides.length: re-measure when cards are added or removed.
+  }, [measure, slides.length])
 
   const scrollToIndex = useCallback(
     (index: number) => {
       const track = trackRef.current
       if (!track) return
-      const clamped = Math.max(0, Math.min(slides.length - 1, index))
+      const clamped = Math.max(0, Math.min(lastStop, index))
       const child = track.children[clamped] as HTMLElement | undefined
       if (!child) return
 
@@ -115,11 +139,11 @@ export default function CardCarousel({
         window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
       track.scrollTo({
-        left: child.offsetLeft - track.offsetLeft,
+        left: slideScrollLeft(track, child),
         behavior: reduceMotion ? 'auto' : 'smooth',
       })
     },
-    [slides.length],
+    [lastStop],
   )
 
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
@@ -138,7 +162,7 @@ export default function CardCarousel({
         break
       case 'End':
         event.preventDefault()
-        scrollToIndex(slides.length - 1)
+        scrollToIndex(lastStop)
         break
     }
   }
@@ -186,7 +210,8 @@ export default function CardCarousel({
           </button>
 
           <div className="flex items-center gap-2.5">
-            {slides.map((slide, index) => {
+            {/* One dot per reachable position, named after its first card. */}
+            {slides.slice(0, lastStop + 1).map((slide, index) => {
               const active = index === activeIndex
               return (
                 <button
