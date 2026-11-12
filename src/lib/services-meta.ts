@@ -19,22 +19,18 @@ import {
  *   4. Numerology
  *   5. Vastu Shastra
  *
- * `thumbClass` drives a generated gradient "thumbnail" band (no external
- * images / hotlinked photos — see note in README) topped with the icon
- * and a large translucent watermark glyph for a distinct, on-brand look
- * per service.
+ * `glyph` is the planetary symbol drawn as a watermark on the service emblem.
  */
 export interface ServiceVisual {
   icon: LucideIcon
-  thumbClass: string
   glyph: string
 }
 
 export const SERVICE_VISUALS: ServiceVisual[] = [
-  { icon: BookOpen,  thumbClass: 'from-violet-bright to-violet',      glyph: '☉' }, // Birth chart — Sun
-  { icon: Heart,     thumbClass: 'from-pink-600 to-rose-500',         glyph: '♀' }, // Relationship — Venus
-  { icon: Briefcase, thumbClass: 'from-blue-700 to-blue-500',         glyph: '♃' }, // Career — Jupiter
-  { icon: Compass,   thumbClass: 'from-gold-dim to-gold',             glyph: '☽' }, // Life guidance — Moon
-  { icon: Hash,      thumbClass: 'from-emerald-700 to-emerald-500',   glyph: '☿' }, // Numerology — Mercury
-  { icon: Home,      thumbClass: 'from-teal-700 to-teal-500',         glyph: '⛩' }, // Vastu — dwelling
+  { icon: BookOpen,  glyph: '☉' }, // Birth chart — Sun
+  { icon: Heart,     glyph: '♀' }, // Relationship — Venus
+  { icon: Briefcase, glyph: '♃' }, // Career — Jupiter
+  { icon: Compass,   glyph: '☽' }, // Life guidance — Moon
+  { icon: Hash,      glyph: '☿' }, // Numerology — Mercury
+  { icon: Home,      glyph: '⛩' }, // Vastu — dwelling
 ]

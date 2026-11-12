@@ -11,8 +11,8 @@ interface Props { initialOrders: Order[] }
 
 const PAYMENT_CLASSES: Record<PaymentStatus, string> = {
   pending: 'bg-yellow-900/40 text-yellow-300 border-yellow-700/40',
-  paid:    'bg-emerald-900/40 text-emerald-300 border-emerald-700/40',
-  failed:  'bg-red-900/40 text-red-300 border-red-700/40',
+  paid:    'bg-success/10 text-success border-success/40',
+  failed:  'bg-danger/10 text-danger border-danger/40',
 }
 
 const ORDER_STATUSES: OrderStatus[] = ['new', 'processing', 'shipped', 'delivered', 'cancelled']
@@ -87,7 +87,7 @@ export default function OrdersClient({ initialOrders }: Props) {
         </div>
       </div>
 
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-sm text-danger">{error}</p>}
       <p className="text-xs text-muted">{filtered.length} {t.common.orders}</p>
 
       {filtered.length === 0 && (

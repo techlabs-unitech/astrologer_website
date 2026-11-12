@@ -27,7 +27,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return (
-    <p role="alert" className="mt-1.5 text-xs text-red-400 flex items-center gap-1.5">
+    <p role="alert" className="mt-1.5 text-xs text-danger flex items-center gap-1.5">
       <AlertCircle className="w-3.5 h-3.5 shrink-0" />
       {message}
     </p>
@@ -89,7 +89,7 @@ function ProductForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
       {serverError && (
-        <div role="alert" className="flex items-center gap-2 rounded-xl border border-red-800/50 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+        <div role="alert" className="flex items-center gap-2 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
           <AlertCircle className="w-4 h-4 shrink-0" />{serverError}
         </div>
       )}
@@ -158,7 +158,7 @@ function ProductForm({
               {translating ? t.common.translating : t.common.autoTranslate}
             </button>
             {translateNote && (
-              <span role="status" className={`text-xs ${translateNote.ok ? 'text-emerald-300' : 'text-amber-300'}`}>{translateNote.msg}</span>
+              <span role="status" className={`text-xs ${translateNote.ok ? 'text-success' : 'text-gold'}`}>{translateNote.msg}</span>
             )}
           </div>
         </fieldset>
@@ -195,16 +195,28 @@ export default function ProductsClient({ initialProducts }: Props) {
   const [feedback, setFeedback]           = useState<{ type: 'ok' | 'err'; msg: string } | null>(null)
   const [isPending, startTransition]      = useTransition()
 
-  function flash(type: 'ok' | 'err', msg: string) {
+  function flash(type: 'ok' | 'err', msg: string, ms = 3000) {
     setFeedback({ type, msg })
-    setTimeout(() => setFeedback(null), 3000)
+    setTimeout(() => setFeedback(null), ms)
+  }
+
+  const typedTranslations = (data: ProductFormValues) =>
+    [data.name_kn, data.name_te, data.description_kn, data.description_te].some((v) => v?.trim())
+
+  /** Success message, plus a note when typed translations could not be stored. */
+  function flashSaved(verb: string, data: ProductFormValues, translationsSaved?: boolean) {
+    if (translationsSaved === false && typedTranslations(data)) {
+      flash('ok', `${t.common.products} ${verb}. ${t.common.translationsNotStored}`, 9000)
+    } else {
+      flash('ok', `${t.common.products} ${verb}.`)
+    }
   }
 
   async function handleCreate(data: ProductFormValues) {
     const result = await createProduct(data)
     if (result.success) {
       setModal(null)
-      flash('ok', `${t.common.products} created.`)
+      flashSaved('created', data, result.translationsSaved)
       // Pull the new row (with its auto-generated id + translations) from the server
       router.refresh()
     } else {
@@ -221,7 +233,7 @@ export default function ProductsClient({ initialProducts }: Props) {
         : p))
       setModal(null)
       setEditTarget(null)
-      flash('ok', `${t.common.products} updated.`)
+      flashSaved('updated', data, result.translationsSaved)
       router.refresh()
     } else {
       throw new Error(result.error)
@@ -264,7 +276,7 @@ export default function ProductsClient({ initialProducts }: Props) {
 
       {feedback && (
         <div role="status" className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm
-          ${feedback.type === 'ok' ? 'border-emerald-700/40 bg-emerald-900/30 text-emerald-300' : 'border-red-800/50 bg-red-950/30 text-red-300'}`}>
+          ${feedback.type === 'ok' ? 'border-success/40 bg-success/10 text-success' : 'border-danger/40 bg-danger/10 text-danger'}`}>
           {feedback.msg}
         </div>
       )}
@@ -297,7 +309,7 @@ export default function ProductsClient({ initialProducts }: Props) {
                 aria-label={product.active ? 'Deactivate product' : 'Activate product'}
                 className="flex items-center gap-1.5 text-xs text-muted hover:text-cream transition-colors">
                 {product.active
-                  ? <ToggleRight className="w-5 h-5 text-emerald-400" />
+                  ? <ToggleRight className="w-5 h-5 text-success" />
                   : <ToggleLeft className="w-5 h-5 text-muted" />}
                 {product.active ? t.common.active : t.common.inactive}
               </button>
@@ -313,7 +325,7 @@ export default function ProductsClient({ initialProducts }: Props) {
                 <button type="button"
                   onClick={() => setDeleteConfirm(product.id)}
                   aria-label={`Delete ${product.name}`}
-                  className="w-8 h-8 rounded-lg border border-cosmic-border flex items-center justify-center text-muted hover:text-red-400 hover:border-red-800/40 transition-all">
+                  className="w-8 h-8 rounded-lg border border-cosmic-border flex items-center justify-center text-muted hover:text-danger hover:border-danger/40 transition-all">
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>

@@ -11,24 +11,67 @@ export type ProductListResult =
   | { success: false; error: string }
 
 export type ProductMutateResult =
-  | { success: true }
+  /** translationsSaved is false when the table has no Kannada / Telugu columns */
+  | { success: true; translationsSaved?: boolean }
   | { success: false; error: string }
+
+type Translations = {
+  name_kn: string | null; name_te: string | null
+  description_kn: string | null; description_te: string | null
+}
+
+/**
+ * Whether the products table has the name_kn / name_te / description_kn /
+ * description_te columns. Unknown until the first save; the live table
+ * currently does not have them, so saves fall back to English-only.
+ */
+let translationColumns: boolean | null = null
+
+function isMissingTranslationColumn(error: { code?: string; message?: string }) {
+  // 42703: Postgres undefined column; PGRST204: column not in PostgREST's schema cache
+  return (
+    (error.code === '42703' || error.code === 'PGRST204') &&
+    /(name|description)_(kn|te)/.test(error.message ?? '')
+  )
+}
+
+/**
+ * Run an insert/update with the translation fields; if the table lacks those
+ * columns, run it again without them so the product still saves.
+ */
+async function saveWithTranslations(
+  translations: Translations,
+  run: (fields: Partial<Translations>) => PromiseLike<{ error: { code?: string; message: string } | null }>,
+) {
+  if (translationColumns !== false) {
+    const { error } = await run(translations)
+    if (!error) {
+      translationColumns = true
+      return { error: null, translationsSaved: true }
+    }
+    if (!isMissingTranslationColumn(error)) return { error, translationsSaved: false }
+    translationColumns = false
+  }
+  const { error } = await run({})
+  return { error, translationsSaved: false }
+}
 
 /**
  * Fill any blank Kannada / Telugu field by translating the English text.
- * Manually-typed translations are never overwritten.
+ * Manually-typed translations are never overwritten. Skipped once we know
+ * the table can't store translations, to avoid paying for unused API calls.
  */
 async function withTranslations(d: {
   name: string; description: string
   name_kn?: string; name_te?: string; description_kn?: string; description_te?: string
-}) {
-  const out = {
+}): Promise<Translations> {
+  const out: Translations = {
     name_kn:        d.name_kn?.trim() || null,
     name_te:        d.name_te?.trim() || null,
     description_kn: d.description_kn?.trim() || null,
     description_te: d.description_te?.trim() || null,
   }
-  if (!isTranslationConfigured()) return out
+  if (!isTranslationConfigured() || translationColumns === false) return out
 
   const [name, desc] = await Promise.all([
     out.name_kn && out.name_te ? null : translateText(d.name),
@@ -90,17 +133,19 @@ export async function createProduct(formData: unknown): Promise<ProductMutateRes
 
   try {
     const supabase = createServiceClient()
-    const payload: ProductInsert = {
+    const base: ProductInsert = {
       name:        parsed.data.name,
       description: parsed.data.description,
       price:       parsed.data.price,
       image_url:   parsed.data.image_url?.trim() || null,
       category:    parsed.data.category,
       active:      parsed.data.active,
-      ...(await withTranslations(parsed.data)),
     }
 
-    const { error } = await supabase.from('products').insert(payload as never)
+    const { error, translationsSaved } = await saveWithTranslations(
+      await withTranslations(parsed.data),
+      (fields) => supabase.from('products').insert({ ...base, ...fields } as never),
+    )
     if (error) {
       console.error('[createProduct]', error.message)
       return { success: false, error: 'Failed to create product.' }
@@ -109,7 +154,7 @@ export async function createProduct(formData: unknown): Promise<ProductMutateRes
     revalidatePath('/admin/products')
     revalidatePath('/shop')
     revalidatePath('/')
-    return { success: true }
+    return { success: true, translationsSaved }
   } catch (err) {
     console.error('[createProduct] unexpected:', err)
     return { success: false, error: 'An unexpected error occurred.' }
@@ -124,21 +169,20 @@ export async function updateProduct(id: string, formData: unknown): Promise<Prod
 
   try {
     const supabase = createServiceClient()
-    const translations = await withTranslations(parsed.data)
-    const { error } = await supabase
-      .from('products')
-      .update({
-        ...translations,
-        name:        parsed.data.name,
-        description: parsed.data.description,
-        price:       parsed.data.price,
-        image_url:   parsed.data.image_url?.trim() || null,
-        category:    parsed.data.category,
-        active:      parsed.data.active,
-        updated_at:  new Date().toISOString(),
-      } as never)
-      .eq('id', id)
+    const base = {
+      name:        parsed.data.name,
+      description: parsed.data.description,
+      price:       parsed.data.price,
+      image_url:   parsed.data.image_url?.trim() || null,
+      category:    parsed.data.category,
+      active:      parsed.data.active,
+      updated_at:  new Date().toISOString(),
+    }
 
+    const { error, translationsSaved } = await saveWithTranslations(
+      await withTranslations(parsed.data),
+      (fields) => supabase.from('products').update({ ...base, ...fields } as never).eq('id', id),
+    )
     if (error) {
       console.error('[updateProduct]', error.message)
       return { success: false, error: 'Failed to update product.' }
@@ -147,7 +191,7 @@ export async function updateProduct(id: string, formData: unknown): Promise<Prod
     revalidatePath('/admin/products')
     revalidatePath('/shop')
     revalidatePath('/')
-    return { success: true }
+    return { success: true, translationsSaved }
   } catch (err) {
     console.error('[updateProduct] unexpected:', err)
     return { success: false, error: 'An unexpected error occurred.' }

@@ -4,45 +4,49 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Container from '@/components/ui/Container'
 import SectionHeading from '@/components/ui/SectionHeading'
-import Card from '@/components/ui/Card'
 import FeaturedProductsCarousel from '@/components/shop/FeaturedProductsCarousel'
-import {
-  Sparkles,
-  ArrowRight,
-  MessageCircle,
-  Shield,
-  Compass,
-  CheckCircle,
-  Calendar,
-} from 'lucide-react'
+import RasiChart from '@/components/astrology/RasiChart'
+import ExploreAstrologySection from '@/components/home/ExploreAstrologySection'
+import FeatureGrid from '@/components/ui/FeatureGrid'
+import CtaBand from '@/components/ui/CtaBand'
+import FounderPortrait from '@/components/ui/FounderPortrait'
+import { ArrowRight, Shield, Compass, Sparkles } from 'lucide-react'
 import { useLanguage } from '@/components/LanguageProvider'
-import { SERVICE_VISUALS } from '@/lib/services-meta'
+import { translations } from '@/translations/translations'
 import type { Product } from '@/types/database'
 
 interface HomeContentProps {
   featuredProducts: Product[]
 }
 
+const SERVICE_GIFS: string[] = [
+  '/images/b-c-a.gif', // Birth Chart Analysis
+  '/images/love-relationship.gif', // Love & Relationship
+  '/images/career-finance.gif', // Career & Finance
+  '/images/life-guidance.gif', // Life Guidance
+  '/images/numerology-reading.gif', // Numerology Reading
+  '/images/vastu-shastra.gif', // Vastu Shastra Consultation
+]
+
+const ASTROLOGERS = [
+  {
+    image: '/images/founders/founder-1.webp',
+    alt: 'Portrait of the astrologer',
+    titleKey: 'astrologerTitle1' as const,
+    name: 'ಡಾ|| ಶ್ರೀಸಾಯಿ ಸ್ವಾಮಿ ಮಲ್ಲುರಾಜ ಎನ್‌.ಆ‌ರ್',
+    signs: ['♈', '♌', '♎', '♓'] as [string, string, string, string],
+  },
+  {
+    image: '/images/founders/founder-2.webp',
+    alt: 'Portrait of the second astrologer',
+    titleKey: 'astrologerTitle2' as const,
+    name: 'ಡಾ|| ಶ್ರೀಮತಿ ಸುಜಾತ ಮಲ್ಲುರಾಜ ಎನ್‌.ಆ‌ರ್.',
+    signs: ['♉', '♍', '♏', '♒'] as [string, string, string, string],
+  },
+]
+
 export default function HomeContent({ featuredProducts }: HomeContentProps) {
-  const { t } = useLanguage()
-
-  const services = t.services.servicesList.map((service, index) => ({
-    ...service,
-    ...SERVICE_VISUALS[index],
-  }))
-
-  const serviceGifs: string[] = [
-    '/images/b-c-a.gif', // Birth Chart Analysis
-    '/images/horoscope-love-star-sign.gif', // Love & Relationship
-    'https://nypost.com/wp-content/uploads/sites/2/2024/01/astrology-savings.gif', // Career & Finance
-    '/images/guidance.gif', // Life Guidance
-    '/images/numerology.gif', // Numerology Reading
-    '/images/office-vastu.gif', // Vastu Shastra Consultation
-  ]
-
-  const getServiceGif = (index: number) => {
-    return serviceGifs[index] || '/images/b-c-a.gif'
-  }
+  const { t, language } = useLanguage()
 
   const benefits = [
     { icon: Sparkles, title: t.home.personalisedInsights, description: t.home.personalisedDescription },
@@ -57,8 +61,6 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
     { value: '20+', label: t.home.countriesServed },
   ]
 
-  // Four distinct "what you gain" points (the old list repeated the stats strip,
-  // the section heading and the benefit cards below).
   const keyFacts = [
     t.home.understandStrengths,
     t.home.majorDecisions,
@@ -68,336 +70,199 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
 
   return (
     <>
-      {/* ══════════════════════════════════════════════════════════════
-          HERO
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="relative pt-32 pb-16 overflow-hidden" aria-label="Hero">
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-56 bg-violet/10 blur-[100px]" />
-          <div className="absolute bottom-0 right-0 w-72 h-72 bg-gold/6 blur-[90px]" />
-        </div>
+      {/* ══ HERO ═══════════════════════════════════════════════════════ */}
+      <section className="bg-cosmic-deep pb-20 pt-32 sm:pt-36 lg:pb-24" aria-labelledby="hero-heading">
+        <Container size="wide">
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
+            <div className="flex min-w-0 flex-col gap-6">
+              <p className="text-sm font-semibold text-gold">{t.home.eyebrow}</p>
 
-        <Container className="relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold/30 bg-gold/5 text-gold-bright text-xs font-semibold tracking-[0.2em] uppercase mb-7">
-              <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-              {t.home.eyebrow}
-            </div>
+              <h1
+                id="hero-heading"
+                className="heading-serif text-balance text-[2.5rem] font-bold leading-[1.12] sm:text-5xl lg:text-6xl"
+              >
+                {t.home.title}
+              </h1>
 
-            <h1 className="heading-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-balance">
-              {t.home.title}
-            </h1>
+              {language !== 'en' && (
+                <p lang="en" className="font-serif text-2xl italic text-violet sm:text-[28px]">
+                  {translations.en.home.title}
+                </p>
+              )}
 
-            <p className="text-silver text-lg leading-relaxed max-w-2xl mx-auto mb-9">
-              {t.home.description}
-            </p>
+              <p className="max-w-2xl text-base leading-relaxed text-silver sm:text-lg">{t.home.description}</p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/appointment" className="btn-primary text-sm px-8 py-3.5 w-full sm:w-auto">
-                <Calendar className="w-4 h-4" aria-hidden="true" />
-                {t.home.bookConsultation}
-              </Link>
-              <Link href="/shop" className="btn-secondary text-sm px-8 py-3.5 w-full sm:w-auto">
-                {t.home.featuredLabel}
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Stats strip */}
-          <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-3xl mx-auto">
-            {stats.map((stat) => (
-              <div key={stat.label} className="glass rounded-2xl px-3 py-5 text-center flex flex-col gap-1">
-                <span className="font-serif text-2xl sm:text-3xl font-bold text-gradient-gold">
-                  {stat.value}
-                </span>
-                <span className="text-muted text-[11px] sm:text-xs uppercase tracking-wide leading-snug">
-                  {stat.label}
-                </span>
+              <div className="mt-2 flex flex-wrap items-center gap-x-7 gap-y-4">
+                <Link href="/appointment" className="btn-primary px-7 text-[15px]">
+                  {t.home.bookConsultation}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <Link href="/shop" className="btn-ghost px-0 text-[15px]">
+                  {t.home.viewShop}
+                </Link>
               </div>
-            ))}
+
+              <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-cosmic-border pt-8 sm:grid-cols-4">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="flex flex-col-reverse gap-1 border-l border-cosmic-border pl-4 sm:pl-5">
+                    <dt className="text-sm text-muted">{stat.label}</dt>
+                    <dd className="font-serif text-[2.25rem] font-semibold leading-none text-cream">{stat.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <RasiChart className="mx-auto w-full max-w-[540px]" />
           </div>
         </Container>
-
-        <span className="divider-gold absolute bottom-0 inset-x-0 opacity-40" aria-hidden="true" />
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          ABOUT / MEET THE ASTROLOGER
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="section-padding bg-section-dark relative" aria-labelledby="home-about-heading">
-        <span className="divider-violet absolute top-0 inset-x-0" aria-hidden="true" />
+      {/* ══ EXPLORE ASTROLOGY ══════════════════════════════════════════ */}
+      <ExploreAstrologySection />
 
-        <Container>
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Portraits */}
-            <div className="relative flex flex-col sm:flex-row items-center justify-center gap-8 min-h-[300px] order-2 md:order-1" aria-hidden="true">
-              {/* First Portrait */}
-              <div className="relative flex flex-col items-center gap-3">
-                <div className="relative">
-                  {[280, 220, 160].map((size, i) => (
-                    <div
-                      key={size}
-                      className="absolute rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                      style={{
-                        width: size,
-                        height: size,
-                        border: `1px solid ${i === 1 ? 'rgba(217,119,6,0.18)' : 'rgba(107,70,193,0.2)'}`,
-                        animation: `rotate-slow ${22 + i * 7}s linear infinite ${i % 2 ? 'reverse' : ''}`,
-                      }}
-                    />
-                  ))}
-
-                  <div className="relative z-10 w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden border-2 border-violet/40 shadow-glow-violet">
-                    <Image
-                      src="/images/astrologer-portrait.png"
-                      alt="Portrait of the astrologer"
-                      fill
-                      sizes="(max-width: 640px) 176px, 208px"
-                      className="object-cover"
-                    />
-                  </div>
-
-                  {[
-                    { sym: '♈', cls: 'top-2 left-2' },
-                    { sym: '♌', cls: 'top-2 right-2' },
-                    { sym: '♎', cls: 'bottom-2 left-2' },
-                    { sym: '♓', cls: 'bottom-2 right-2' },
-                  ].map(({ sym, cls }) => (
-                    <span key={sym} className={`absolute ${cls} text-xl text-violet-light/30 font-serif animate-twinkle-slow`}>
-                      {sym}
+      {/* ══ MEET THE ASTROLOGERS ═══════════════════════════════════════ */}
+      <section className="section-padding border-y border-cosmic-border bg-cosmic-deep" aria-labelledby="home-about-heading">
+        <Container size="wide">
+          <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+            <div className="order-2 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:order-1">
+              {ASTROLOGERS.map((person, index) => (
+                <figure key={person.image} className="m-0 flex flex-col items-center gap-4 text-center">
+                  <FounderPortrait
+                    src={person.image}
+                    alt={person.alt}
+                    signs={person.signs}
+                    reverse={index === 1}
+                    sizes="(max-width: 640px) 70vw, (max-width: 1024px) 35vw, 230px"
+                  />
+                  <figcaption className="flex flex-col gap-1">
+                    <span className="eyebrow">{t.home[person.titleKey]}</span>
+                    <span lang="kn" className="text-[15px] font-medium text-cream">
+                      {person.name}
                     </span>
-                  ))}
-                </div>
-                <div className="text-center">
-                  <p className="text-gold-bright font-semibold text-sm mb-1">ಜ್ಯೋತಿಷ್ಯ ರತ್ನ</p>
-                  <p className="text-silver text-xs">ಡಾ|| ಶ್ರೀಸಾಯಿ ಸ್ವಾಮಿ ಮಲ್ಲುರಾಜ ಎನ್‌.ಆ‌ರ್</p>
-                </div>
-              </div>
-
-              {/* Second Portrait */}
-              <div className="relative flex flex-col items-center gap-3">
-                <div className="relative">
-                  {[280, 220, 160].map((size, i) => (
-                    <div
-                      key={size}
-                      className="absolute rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                      style={{
-                        width: size,
-                        height: size,
-                        border: `1px solid ${i === 1 ? 'rgba(217,119,6,0.18)' : 'rgba(107,70,193,0.2)'}`,
-                        animation: `rotate-slow ${22 + i * 7}s linear infinite ${i % 2 ? '' : 'reverse'}`,
-                      }}
-                    />
-                  ))}
-
-                  <div className="relative z-10 w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden border-2 border-gold/40 shadow-glow-gold">
-                    <Image
-                      src="/images/astrologer-portrait-2.png"
-                      alt="Portrait of the second astrologer"
-                      fill
-                      sizes="(max-width: 640px) 176px, 208px"
-                      className="object-cover"
-                    />
-                  </div>
-
-                  {[
-                    { sym: '♉', cls: 'top-2 left-2' },
-                    { sym: '♍', cls: 'top-2 right-2' },
-                    { sym: '♏', cls: 'bottom-2 left-2' },
-                    { sym: '♒', cls: 'bottom-2 right-2' },
-                  ].map(({ sym, cls }) => (
-                    <span key={sym} className={`absolute ${cls} text-xl text-gold/30 font-serif animate-twinkle-slow`}>
-                      {sym}
-                    </span>
-                  ))}
-                </div>
-                <div className="text-center">
-                  <p className="text-gold-bright font-semibold text-sm mb-1">ಜ್ಯೋತಿಷ್ಯ ವಿಭೂಷಣ</p>
-                  <p className="text-silver text-xs">ಡಾ|| ಶ್ರೀಮತಿ ಸುಜಾತ ಮಲ್ಲುರಾಜ ಎನ್‌.ಆ‌ರ್.</p>
-                </div>
-              </div>
+                  </figcaption>
+                </figure>
+              ))}
             </div>
 
-            {/* Bio */}
-            <div className="flex flex-col gap-5 order-1 md:order-2">
-              <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-gold-bright">
-                <span className="glow-dot" aria-hidden="true" />
-                {t.home.meetAstrologer}
-              </span>
-
-              <h2 id="home-about-heading" className="heading-serif text-3xl sm:text-4xl font-bold text-balance">
-                {t.home.ancientWisdom},{' '}
-                <span className="text-gradient-gold">{t.home.personalisedInsights}</span>
+            <div className="order-1 flex flex-col gap-5 lg:order-2">
+              <span className="eyebrow">{t.home.meetAstrologer}</span>
+              <h2 id="home-about-heading" className="heading-serif text-balance text-3xl font-bold sm:text-4xl md:text-5xl">
+                {t.home.ancientWisdom}
               </h2>
+              <p className="text-base leading-relaxed text-silver sm:text-lg">{t.home.astrologyDescription}</p>
 
-              <p className="text-silver leading-relaxed">{t.home.astrologyDescription}</p>
-
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1" role="list">
+              <ul className="mt-2 grid grid-cols-1 border-t border-cosmic-border sm:grid-cols-2" role="list">
                 {keyFacts.map((fact) => (
-                  <li key={fact} className="flex items-center gap-2 text-sm text-silver">
-                    <CheckCircle className="w-3.5 h-3.5 text-gold-bright shrink-0" aria-hidden="true" />
+                  <li key={fact} className="flex items-start gap-3 border-b border-cosmic-border py-4 text-[15px] text-silver sm:pr-4">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-gold-light" aria-hidden="true" />
                     {fact}
                   </li>
                 ))}
               </ul>
 
-              <Link href="/about" className="btn-secondary w-fit text-sm mt-2">
+              <Link href="/about" className="btn-secondary mt-3 w-fit">
                 {t.nav.about}
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
           </div>
         </Container>
-
-        <span className="divider-gold absolute bottom-0 inset-x-0 opacity-30" aria-hidden="true" />
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          SERVICES
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="section-padding relative" aria-labelledby="services-heading">
-        <Container>
+      {/* ══ SERVICES ═══════════════════════════════════════════════════ */}
+      <section className="section-padding bg-cosmic-black" aria-labelledby="services-heading">
+        <Container size="wide">
           <SectionHeading
             id="services-heading"
             label={t.home.whatWeOffer}
-            title={t.home.ourAstrology}
-            highlight={t.home.services}
+            title={`${t.home.ourAstrology} ${t.home.services}`}
             subtitle={t.home.servicesSubtitle}
-            className="mb-14"
+            layout="split"
+            className="mb-12"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => {
-              return (
-                <Card key={service.title} variant="bare" accent className="flex flex-col">
-                  <div
-                    className={`relative h-48 w-full overflow-hidden bg-gradient-to-br ${service.thumbClass}`}
-                    aria-hidden="true"
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {t.services.servicesList.map((service, index) => (
+              <article key={service.title} className="card-cosmic flex flex-col overflow-hidden">
+                <div className="relative aspect-[2/1] w-full overflow-hidden bg-night" aria-hidden="true">
+                  <Image
+                    src={SERVICE_GIFS[index] ?? SERVICE_GIFS[0]}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+                <div className="flex flex-1 flex-col gap-3 p-6">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="font-serif text-2xl font-bold text-cream">{service.title}</h3>
+                    <span className="font-serif text-lg italic text-gold" aria-hidden="true">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <p className="flex-1 text-[15px] leading-relaxed text-silver">{service.description}</p>
+                  <Link
+                    href="/appointment"
+                    className="group mt-2 flex min-h-[48px] items-center justify-between border-t border-cosmic-border pt-4 text-[15px] font-semibold text-cream transition-colors hover:text-gold"
                   >
-                    <Image
-                      src={getServiceGif(index)}
-                      alt={service.title}
-                      fill
-                      sizes="(max-width: 640px) 300px, 400px"
-                      className="object-contain"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-3 p-6 flex-1">
-                    <h3 className="font-serif text-cream font-semibold text-lg">{service.title}</h3>
-                    <p className="text-muted text-sm leading-relaxed flex-1">{service.description}</p>
-                    <Link
-                      href="/appointment"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-gold-bright hover:text-gold transition-colors mt-1"
-                    >
-                      {t.home.bookConsultation}
-                      <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                    </Link>
-                  </div>
-                </Card>
-              )
-            })}
+                    {t.home.bookConsultation}
+                    <span className="sr-only">: {service.title}</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
 
-          <div className="flex justify-center mt-10">
-            <Link href="/services" className="btn-ghost text-sm">
+          <div className="mt-10 flex justify-center">
+            <Link href="/services" className="btn-ghost">
               {t.home.viewAllServices}
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </Container>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          FEATURED PRODUCTS CAROUSEL
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ══ FEATURED PRODUCTS ══════════════════════════════════════════ */}
       {featuredProducts.length > 0 && (
-        <section className="section-padding bg-section-dark relative" aria-labelledby="featured-heading">
-          <span className="divider-violet absolute top-0 inset-x-0" aria-hidden="true" />
-
-          <Container>
+        <section className="section-padding border-y border-cosmic-border bg-cosmic-deep" aria-labelledby="featured-heading">
+          <Container size="wide">
             <SectionHeading
               id="featured-heading"
               label={t.home.featuredLabel}
-              title={t.home.featuredTitle}
-              highlight={t.home.featuredHighlight}
+              title={`${t.home.featuredTitle} ${t.home.featuredHighlight}`}
               subtitle={t.home.featuredSubtitle}
+              layout="split"
               className="mb-12"
             />
-
             <FeaturedProductsCarousel products={featuredProducts} />
           </Container>
-
-          <span className="divider-gold absolute bottom-0 inset-x-0 opacity-30" aria-hidden="true" />
         </section>
       )}
 
-      {/* ══════════════════════════════════════════════════════════════
-          BENEFITS
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="section-padding" aria-labelledby="benefits-heading">
-        <Container>
+      {/* ══ WHY CHOOSE US ══════════════════════════════════════════════ */}
+      <section className="section-padding bg-cosmic-black" aria-labelledby="benefits-heading">
+        <Container size="wide">
           <SectionHeading
             id="benefits-heading"
             label={t.home.whyChooseUs}
-            title={t.home.guidanceYouCan}
-            highlight={t.home.trust}
+            title={`${t.home.guidanceYouCan} ${t.home.trust}`}
             subtitle={t.home.whyChooseSubtitle}
-            className="mb-14"
+            layout="split"
+            className="mb-12"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {benefits.map((benefit) => {
-              const Icon = benefit.icon
-              return (
-                <Card key={benefit.title} accent className="p-7 text-center flex flex-col items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet/20 to-gold/10 border border-violet/20 flex items-center justify-center">
-                    <Icon className="w-6 h-6 text-gold-bright" aria-hidden="true" />
-                  </div>
-                  <h3 className="font-serif text-cream font-semibold text-lg">{benefit.title}</h3>
-                  <p className="text-muted text-sm leading-relaxed">{benefit.description}</p>
-                </Card>
-              )
-            })}
-          </div>
+          <FeatureGrid items={benefits} />
         </Container>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          SHOP + APPOINTMENT CTA
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="section-padding bg-section-dark relative" aria-labelledby="cta-heading">
-        <span className="divider-violet absolute top-0 inset-x-0" aria-hidden="true" />
-
-        <Container size="sm">
-          <div className="glass rounded-3xl border border-violet/30 px-6 sm:px-12 py-14 text-center flex flex-col items-center gap-6">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-violet to-gold flex items-center justify-center shadow-glow-violet">
-              <MessageCircle className="w-6 h-6 text-white" aria-hidden="true" />
-            </div>
-
-            <h2 id="cta-heading" className="heading-serif text-2xl sm:text-3xl font-bold text-balance">
-              {t.home.readyToFind}{' '}
-              <span className="text-gradient-gold">{t.home.cosmicDirection}</span>
-            </h2>
-
-            <p className="text-silver text-base max-w-md leading-relaxed">{t.home.finalDescription}</p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/appointment" className="btn-primary text-sm px-8 py-3.5">
-                {t.home.bookConsultation}
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </Link>
-
-              <Link href="/shop" className="btn-secondary text-sm px-8 py-3.5">
-                {t.common.exploreShop}
-                <Sparkles className="w-4 h-4" aria-hidden="true" />
-              </Link>
-            </div>
-
-          </div>
-        </Container>
-      </section>
+      <CtaBand
+        title={`${t.home.readyToFind} ${t.home.cosmicDirection}`}
+        description={t.home.finalDescription}
+        primary={{ href: '/appointment', label: t.home.bookConsultation }}
+        secondary={{ href: '/shop', label: t.common.exploreShop }}
+      />
     </>
   )
 }

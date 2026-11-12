@@ -29,7 +29,7 @@ export default function BookingConfirmation({
     <div className="flex flex-col items-center gap-6 text-center py-4">
       {/* Success icon */}
       <div className="relative">
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/30 to-violet/20 border border-gold/40 flex items-center justify-center shadow-glow-gold">
+        <div className="w-20 h-20 rounded-full border border-gold-light/70 flex items-center justify-center shadow-glow-gold">
           <CheckCircle2 className="w-10 h-10 text-gold-bright" aria-hidden="true" />
         </div>
         {/* Orbit dots */}

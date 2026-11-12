@@ -38,7 +38,7 @@ function NavLink({ href, label, icon: Icon, active, onClick }: {
         focus-visible:outline-2 focus-visible:outline-gold-bright
         ${active
           ? 'bg-violet/20 text-gold-bright border border-violet/30'
-          : 'text-silver hover:text-cream hover:bg-white/5'
+          : 'text-silver hover:text-cream hover:bg-cream/5'
         }`}
       aria-current={active ? 'page' : undefined}
     >
@@ -59,7 +59,7 @@ export default function AdminSidebar() {
       {/* ── Mobile top bar ──────────────────────────────────────── */}
       <div className="md:hidden fixed top-0 inset-x-0 z-50 h-14 bg-cosmic-deep/95 backdrop-blur border-b border-cosmic-border flex items-center justify-between px-4">
         <Link href="/admin/dashboard" className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-full bg-gradient-to-br from-violet to-gold flex items-center justify-center">
+          <span className="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center">
             <Star className="w-3.5 h-3.5 text-cosmic-black fill-current" />
           </span>
           <span className="font-serif font-bold text-sm text-cream">SaiBabaAstro <span className="text-gold-bright">{t.common.admin}</span></span>
@@ -98,7 +98,7 @@ export default function AdminSidebar() {
         {/* Logo */}
         <div className="h-16 flex items-center px-5 border-b border-cosmic-border shrink-0">
           <Link href="/admin/dashboard" className="flex items-center gap-2.5 group">
-            <span className="w-8 h-8 rounded-full bg-gradient-to-br from-violet to-gold flex items-center justify-center shadow-glow-sm">
+            <span className="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-glow-sm">
               <Star className="w-4 h-4 text-cosmic-black fill-current" />
             </span>
             <div className="flex flex-col leading-tight">
@@ -126,7 +126,7 @@ export default function AdminSidebar() {
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-muted hover:text-cream hover:bg-white/5 transition-colors"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-muted hover:text-cream hover:bg-cream/5 transition-colors"
           >
             <Star className="w-4 h-4 shrink-0" />
             {t.nav.home}
@@ -134,7 +134,7 @@ export default function AdminSidebar() {
           <form action={signOut}>
             <button
               type="submit"
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-gold-bright"
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-danger hover:text-danger hover:bg-danger/10 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-gold-bright"
             >
               <LogOut className="w-4 h-4 shrink-0" />
               {t.common.back}

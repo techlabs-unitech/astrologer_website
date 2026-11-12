@@ -25,7 +25,7 @@ type Step = 'service' | 'datetime' | 'details' | 'summary' | 'confirmed'
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return (
-    <p role="alert" className="flex items-center gap-1.5 mt-1.5 text-xs text-red-400">
+    <p role="alert" className="flex items-center gap-1.5 mt-1.5 text-xs text-danger">
       <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
       {message}
     </p>
@@ -59,7 +59,7 @@ function StepIndicator({ current }: { current: Step }) {
                   className={`
                     w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all duration-200
                     ${done   ? 'bg-gold border-gold text-cosmic-black'
-                    : active ? 'bg-violet border-violet-bright text-white shadow-glow-violet'
+                    : active ? 'bg-primary border-primary text-on-primary'
                     :          'bg-transparent border-cosmic-border text-muted'}
                   `}
                   aria-current={active ? 'step' : undefined}
@@ -281,7 +281,7 @@ export default function AppointmentForm({ preselectedService }: AppointmentFormP
           />
 
           {serviceError && (
-            <p role="alert" className="flex items-center gap-1.5 mt-4 text-xs text-red-400">
+            <p role="alert" className="flex items-center gap-1.5 mt-4 text-xs text-danger">
               <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
               {serviceError}
             </p>
@@ -346,7 +346,7 @@ export default function AppointmentForm({ preselectedService }: AppointmentFormP
 
           {/* Slot-taken error from server (after round-trip) */}
           {serverError && step === 'datetime' && (
-            <div role="alert" className="mt-4 rounded-xl border border-red-800/50 bg-red-950/30 px-4 py-3 text-sm text-red-300 flex items-start gap-2">
+            <div role="alert" className="mt-4 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger flex items-start gap-2">
               <span className="shrink-0 mt-0.5" aria-hidden="true">⚠</span>
               {serverError}
             </div>
@@ -382,7 +382,7 @@ export default function AppointmentForm({ preselectedService }: AppointmentFormP
               <div className="grid sm:grid-cols-2 gap-5">
                 <div>
                   <label htmlFor="appt-name" className="label-cosmic">
-                    {t.common.fullName} <span className="text-red-400" aria-hidden="true">*</span>
+                    {t.common.fullName} <span className="text-danger" aria-hidden="true">*</span>
                   </label>
                   <input
                     id="appt-name"
@@ -400,7 +400,7 @@ export default function AppointmentForm({ preselectedService }: AppointmentFormP
 
                 <div>
                   <label htmlFor="appt-email" className="label-cosmic">
-                    {t.common.email} <span className="text-red-400" aria-hidden="true">*</span>
+                    {t.common.email} <span className="text-danger" aria-hidden="true">*</span>
                   </label>
                   <input
                     id="appt-email"
@@ -420,7 +420,7 @@ export default function AppointmentForm({ preselectedService }: AppointmentFormP
               {/* Phone */}
               <div className="sm:w-1/2">
                 <label htmlFor="appt-phone" className="label-cosmic">
-                  {t.common.phone} <span className="text-red-400" aria-hidden="true">*</span>
+                  {t.common.phone} <span className="text-danger" aria-hidden="true">*</span>
                 </label>
                 <input
                   id="appt-phone"

@@ -8,16 +8,6 @@ interface ServiceSelectorProps {
   onSelect: (service: AvailableService) => void
 }
 
-// Icon background per product id — full static strings, no dynamic construction
-const ICON_GRADIENT: Record<string, string> = {
-  prod_001: 'from-gold-dim to-gold',
-  prod_002: 'from-pink-700 to-pink-500',
-  prod_003: 'from-blue-700 to-blue-500',
-  prod_004: 'from-violet to-violet-bright',
-  prod_005: 'from-violet-bright to-violet-glow',
-  prod_006: 'from-gold to-gold-bright',
-}
-
 export default function ServiceSelector({ selected, onSelect }: ServiceSelectorProps) {
   const { t } = useLanguage()
   return (
@@ -26,7 +16,6 @@ export default function ServiceSelector({ selected, onSelect }: ServiceSelectorP
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {STATIC_PRODUCTS.map((product) => {
           const isSelected = selected === product.name
-          const gradient = ICON_GRADIENT[product.id] ?? 'from-violet to-gold'
 
           return (
             <button
@@ -39,7 +28,7 @@ export default function ServiceSelector({ selected, onSelect }: ServiceSelectorP
                 relative text-left rounded-2xl border p-4 transition-all duration-200
                 focus-visible:outline-2 focus-visible:outline-gold-bright focus-visible:outline-offset-2
                 ${isSelected
-                  ? 'border-gold/60 bg-gold/8 shadow-glow-gold'
+                  ? 'border-gold-light bg-gold/10'
                   : 'border-cosmic-border bg-card-gradient hover:border-violet/40 hover:bg-violet/5'
                 }
               `}
@@ -55,11 +44,7 @@ export default function ServiceSelector({ selected, onSelect }: ServiceSelectorP
               )}
 
               <div className="flex items-start gap-3">
-                {/* Colour dot */}
-                <span
-                  className={`mt-0.5 w-2.5 h-2.5 rounded-full bg-gradient-to-br ${gradient} shrink-0`}
-                  aria-hidden="true"
-                />
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rotate-45 bg-gold-light" aria-hidden="true" />
 
                 <div className="flex flex-col gap-1 min-w-0 flex-1 pr-6">
                   <span className={`font-serif font-semibold text-sm leading-snug ${isSelected ? 'text-gold-bright' : 'text-cream'}`}>

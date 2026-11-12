@@ -2,8 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { useLanguage } from '@/components/LanguageProvider'
-
-const WHATSAPP_NUMBER = '919591066613' // +91 95910 66613
+import { SOCIAL } from '@/lib/contact-info'
 
 /** Floating WhatsApp chat button — bottom-right on every public page. */
 export default function WhatsAppButton() {
@@ -13,7 +12,8 @@ export default function WhatsAppButton() {
   // Not needed inside the admin portal
   if (pathname?.startsWith('/admin')) return null
 
-  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(t.common.whatsappGreeting)}`
+  // Same number as the footer and contact page (src/lib/contact-info.ts)
+  const href = `${SOCIAL.whatsapp}?text=${encodeURIComponent(t.common.whatsappGreeting)}`
 
   return (
     <a

@@ -3,41 +3,16 @@
 import Link from 'next/link'
 import Container from '@/components/ui/Container'
 import SectionHeading from '@/components/ui/SectionHeading'
-import Card from '@/components/ui/Card'
-import {
-  Sparkles,
-  ArrowRight,
-  MessageCircle,
-  Shield,
-  Compass,
-} from 'lucide-react'
+import PageHero from '@/components/ui/PageHero'
+import FeatureGrid from '@/components/ui/FeatureGrid'
+import CtaBand from '@/components/ui/CtaBand'
+import ServiceEmblem from '@/components/ui/ServiceEmblem'
+import { Sparkles, ArrowRight, Shield, Compass } from 'lucide-react'
 import { useLanguage } from '@/components/LanguageProvider'
 import { SERVICE_VISUALS } from '@/lib/services-meta'
 
-const BENEFITS = [
-  {
-    icon: Sparkles,
-    title: 'Personalised Insights',
-    description:
-      'Every consultation is based on your individual birth chart and personal questions.',
-  },
-  {
-    icon: Shield,
-    title: 'Confidential',
-    description:
-      'Your personal information and consultation details are treated with complete privacy.',
-  },
-  {
-    icon: Compass,
-    title: 'Practical Guidance',
-    description:
-      'Receive clear insights that can help you make thoughtful decisions in everyday life.',
-  },
-]
-
 export default function ServicesPage() {
   const { t } = useLanguage()
-  void BENEFITS
   const services = t.services.servicesList.map((service, index) => ({
     ...service,
     ...SERVICE_VISUALS[index],
@@ -47,230 +22,98 @@ export default function ServicesPage() {
     { icon: Shield, title: t.home.confidentialConsultations, description: t.home.confidentialDescription },
     { icon: Compass, title: t.home.practicalAdvice, description: t.home.practicalDescription },
   ]
+
   return (
     <>
-      {/* HERO */}
-      <section
-        className="relative pt-32 pb-20 overflow-hidden"
-        aria-label="Astrology services"
+      <PageHero
+        label={t.home.ourAstrology}
+        title={t.services.title}
+        description={t.home.servicesSubtitle}
       >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          aria-hidden="true"
-        >
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-56 bg-violet/10 blur-[100px]" />
-          <div className="absolute bottom-0 right-0 w-72 h-72 bg-gold/6 blur-[90px]" />
+        <div className="mt-2 flex flex-wrap items-center gap-x-7 gap-y-4">
+          <Link href="/appointment" className="btn-primary px-7 text-[15px]">
+            {t.home.bookConsultation}
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </div>
-
-        <Container className="relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold/30 bg-gold/5 text-gold-bright text-xs font-semibold tracking-[0.2em] uppercase mb-7">
-              <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-              {t.home.ourAstrology}
-            </div>
-
-            <h1 className="heading-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
-              {t.home.guidanceYouCan}{' '}
-              <span className="text-gradient-gold">{t.home.trust}</span>
-            </h1>
-
-            <p className="text-silver text-lg leading-relaxed max-w-2xl mx-auto">
-              {t.home.servicesSubtitle}
-            </p>
-          </div>
-        </Container>
-
-        <span
-          className="divider-gold absolute bottom-0 inset-x-0 opacity-40"
-          aria-hidden="true"
-        />
-      </section>
+      </PageHero>
 
       {/* SERVICES */}
-      <section
-        className="section-padding bg-section-dark relative"
-        aria-labelledby="services-heading"
-      >
-        <span
-          className="divider-violet absolute top-0 inset-x-0"
-          aria-hidden="true"
-        />
-
-        <Container>
+      <section className="section-padding bg-cosmic-black" aria-labelledby="services-heading">
+        <Container size="wide">
           <SectionHeading
             id="services-heading"
             label={t.home.whatWeOffer}
-            title={t.home.ourAstrology}
-            highlight={t.home.services}
-            subtitle={t.home.servicesSubtitle}
-            className="mb-14"
+            title={`${t.home.ourAstrology} ${t.home.services}`}
+            subtitle={t.services.subtitle}
+            layout="split"
+            className="mb-12"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {services.map((service) => {
-              const Icon = service.icon
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {services.map((service, index) => (
+              <article key={service.title} className="card-cosmic flex flex-col overflow-hidden sm:flex-row">
+                <ServiceEmblem
+                  icon={service.icon}
+                  glyph={service.glyph}
+                  className="h-40 sm:h-auto sm:w-48 sm:shrink-0"
+                />
 
-              return (
-                <Card
-                  key={service.title}
-                  variant="bare"
-                  accent
-                  className="flex flex-col"
-                >
-                  {/* Service thumbnail */}
-                  <div
-                    className={`relative h-32 sm:h-36 w-full overflow-hidden bg-gradient-to-br ${service.thumbClass}`}
-                    aria-hidden="true"
-                  >
-                    <span className="absolute -right-3 -bottom-5 text-[6rem] leading-none font-serif text-white/15 select-none">
-                      {service.glyph}
+                <div className="flex flex-1 flex-col p-6 sm:p-7">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h2 className="font-serif text-2xl font-bold text-cream">{service.title}</h2>
+                    <span className="font-serif text-lg italic text-gold" aria-hidden="true">
+                      {String(index + 1).padStart(2, '0')}
                     </span>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-14 h-14 rounded-2xl bg-black/20 border border-white/25 backdrop-blur-sm flex items-center justify-center">
-                        <Icon className="w-7 h-7 text-white" />
-                      </div>
-                    </div>
                   </div>
 
-                  <div className="flex flex-col flex-1 p-7 sm:p-8">
-                    <h3 className="font-serif text-xl text-cream font-semibold mb-2">
-                      {service.title}
-                    </h3>
+                  <p className="mt-2 text-[15px] leading-relaxed text-silver">{service.description}</p>
 
-                    <p className="text-muted text-sm leading-relaxed">
-                      {service.description}
-                    </p>
+                  <ul className="mt-5 grid grid-cols-1 gap-x-4 gap-y-2 border-t border-cosmic-border pt-5 sm:grid-cols-2" role="list">
+                    {service.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2.5 text-sm text-silver">
+                        <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rotate-45 bg-gold-light" aria-hidden="true" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
 
-                    <div className="mt-6 pt-5 border-t border-cosmic-border">
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {service.features.map((feature) => (
-                          <li
-                            key={feature}
-                            className="flex items-center gap-2 text-sm text-silver"
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-gold-bright shrink-0" />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="mt-7">
-                      <Link
-                        href="/appointment"
-                        className="btn-secondary inline-flex text-sm px-6 py-3"
-                      >
-                        {t.home.bookConsultation}
-                        <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                      </Link>
-                    </div>
-                  </div>
-                </Card>
-              )
-            })}
+                  <Link
+                    href="/appointment"
+                    className="group mt-6 flex min-h-[48px] items-center justify-between border-t border-cosmic-border pt-4 text-[15px] font-semibold text-cream transition-colors hover:text-gold"
+                  >
+                    {t.home.bookConsultation}
+                    <span className="sr-only">: {service.title}</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
         </Container>
-
-        <span
-          className="divider-gold absolute bottom-0 inset-x-0 opacity-30"
-          aria-hidden="true"
-        />
       </section>
 
       {/* BENEFITS */}
-      <section className="section-padding" aria-labelledby="benefits-heading">
-        <Container>
+      <section className="section-padding border-t border-cosmic-border bg-cosmic-deep" aria-labelledby="benefits-heading">
+        <Container size="wide">
           <SectionHeading
             id="benefits-heading"
             label={t.home.whyChooseUs}
-            title={t.home.guidanceYouCan}
-            highlight={t.home.trust}
+            title={`${t.home.guidanceYouCan} ${t.home.trust}`}
             subtitle={t.home.whyChooseSubtitle}
-            className="mb-14"
+            layout="split"
+            className="mb-12"
           />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {benefits.map((benefit) => {
-              const Icon = benefit.icon
-
-              return (
-                <Card
-                  key={benefit.title}
-                  accent
-                  className="p-7 text-center flex flex-col items-center gap-4"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet/20 to-gold/10 border border-violet/20 flex items-center justify-center">
-                    <Icon
-                      className="w-6 h-6 text-gold-bright"
-                      aria-hidden="true"
-                    />
-                  </div>
-
-                  <h3 className="font-serif text-cream font-semibold text-lg">
-                    {benefit.title}
-                  </h3>
-
-                  <p className="text-muted text-sm leading-relaxed">
-                    {benefit.description}
-                  </p>
-                </Card>
-              )
-            })}
-          </div>
+          <FeatureGrid items={benefits} />
         </Container>
       </section>
 
-      {/* SHOP + APPOINTMENT CTA */}
-      <section
-        className="section-padding bg-section-dark relative"
-        aria-labelledby="cta-heading"
-      >
-        <span
-          className="divider-violet absolute top-0 inset-x-0"
-          aria-hidden="true"
-        />
-
-        <Container size="sm">
-          <div className="glass rounded-3xl border border-violet/30 px-6 sm:px-12 py-14 text-center flex flex-col items-center gap-6">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-violet to-gold flex items-center justify-center shadow-glow-violet">
-              <MessageCircle
-                className="w-6 h-6 text-white"
-                aria-hidden="true"
-              />
-            </div>
-
-            <h2
-              id="cta-heading"
-              className="heading-serif text-2xl sm:text-3xl font-bold text-balance"
-            >
-              {t.home.readyToFind}{' '}
-              <span className="text-gradient-gold">{t.home.cosmicDirection}</span>
-            </h2>
-
-            <p className="text-silver text-base max-w-md leading-relaxed">
-              {t.home.finalDescription}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/appointment"
-                className="btn-primary text-sm px-8 py-3.5"
-              >
-                {t.home.bookConsultation}
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </Link>
-
-              <Link
-                href="/shop"
-                className="btn-secondary text-sm px-8 py-3.5"
-              >
-                {t.common.exploreShop}
-                <Sparkles className="w-4 h-4" aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <CtaBand
+        title={`${t.home.readyToFind} ${t.home.cosmicDirection}`}
+        description={t.home.finalDescription}
+        primary={{ href: '/appointment', label: t.home.bookConsultation }}
+        secondary={{ href: '/shop', label: t.common.exploreShop }}
+      />
     </>
   )
 }

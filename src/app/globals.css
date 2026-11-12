@@ -2,30 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── CSS custom properties ─────────────────────────────────────────────────── */
-:root {
-  --bg-primary:    #07060f;
-  --bg-secondary:  #0d0b1e;
-  --bg-section:    #0f0d2a;
-  --bg-card:       #13103a;
+/* ═══════════════════════════════════════════════════════════════════════════
+   PANCHANGA THEME TOKENS
+   Space-separated RGB channels so Tailwind opacity modifiers work
+   (e.g. `bg-gold/10`). Roles are documented in tailwind.config.ts.
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-  --accent-violet: #6b46c1;
-  --accent-violet-bright: #8b5cf6;
-  --accent-gold:   #d97706;
-  --accent-gold-bright: #f59e0b;
-
-  --text-primary:  #f5f0e8;
-  --text-secondary: #cbd5e1;
-  --text-muted:    #94a3b8;
-
-  --border-subtle: rgba(107, 70, 193, 0.25);
-  --border-card:   rgba(42, 32, 96, 0.8);
-
-  --glow-violet:   rgba(107, 70, 193, 0.4);
-  --glow-gold:     rgba(217, 119, 6, 0.4);
+/* Light · cream (default) */
+:root,
+html[data-theme='light'] {
+  color-scheme: light;
+  --c-ground:      251 246 243; /* #FBF6F3 */
+  --c-band:        244 229 221; /* #F4E5DD */
+  --c-band-alt:    247 238 232; /* #F7EEE8 */
+  --c-card:        255 253 251; /* #FFFDFB */
+  --c-line:        226 210 200; /* #E2D2C8 */
+  --c-ink:          40  16  68; /* #281044 */
+  --c-body:         74  58  92; /* #4A3A5C */
+  --c-muted:       102  85 119; /* #665577 */
+  --c-gold:        138  92  18; /* #8A5C12  text-safe gold on cream */
+  --c-gold-dim:    107  70  12; /* #6B460C */
+  --c-gold-line:   201 150  58; /* #C9963A  rules and underlines */
+  --c-gold-pale:   246 234 208; /* #F6EAD0 */
+  --c-violet:       84  33 123; /* #54217B */
+  --c-violet-soft: 107  63 150; /* #6B3F96 */
+  --c-violet-dim:  217 198 232; /* #D9C6E8 */
+  --c-primary:      40  16  68; /* #281044 */
+  --c-on-primary:  251 246 243; /* #FBF6F3 */
+  --c-danger:      180  35  24; /* #B42318 */
+  --c-success:       6 118  71; /* #067647 */
+  --c-shadow:       40  16  68;
 }
 
-/* ─── Base reset & defaults ─────────────────────────────────────────────────── */
+/* Dark · temple night */
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --c-ground:       18   6  31; /* #12061F */
+  --c-band:         28  11  48; /* #1C0B30 */
+  --c-band-alt:     22   8  38; /* #160826 */
+  --c-card:         35  16  64; /* #231040 */
+  --c-line:         61  40  87; /* #3D2857 */
+  --c-ink:         244 229 221; /* #F4E5DD */
+  --c-body:        216 200 226; /* #D8C8E2 */
+  --c-muted:       181 162 198; /* #B5A2C6 */
+  --c-gold:        230 181  83; /* #E6B553 */
+  --c-gold-dim:    185 135  47; /* #B9872F */
+  --c-gold-line:   230 181  83; /* #E6B553 */
+  --c-gold-pale:    58  42  22; /* #3A2A16 */
+  --c-violet:      201 166 238; /* #C9A6EE */
+  --c-violet-soft: 221 200 245; /* #DDC8F5 */
+  --c-violet-dim:   59  36 100; /* #3B2464 */
+  --c-primary:     230 181  83; /* #E6B553 */
+  --c-on-primary:   28  11  48; /* #1C0B30 */
+  --c-danger:      253 162 155; /* #FDA29B */
+  --c-success:     117 224 167; /* #75E0A7 */
+  --c-shadow:        0   0   0;
+}
+
+/* ─── Base ──────────────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
@@ -37,233 +71,149 @@
   }
 
   body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-      Roboto, 'Helvetica Neue', Arial, sans-serif;
-    line-height: 1.6;
+    @apply font-sans;
+    background-color: rgb(var(--c-ground));
+    color: rgb(var(--c-ink));
+    line-height: 1.65;
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Headings use the serif display stack */
   h1, h2, h3, h4, h5, h6 {
-    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    @apply font-serif;
     line-height: 1.2;
-    color: var(--text-primary);
+    color: rgb(var(--c-ink));
   }
 
-  /* Accessible focus ring */
+  /* Kannada and Telugu display faces read best a touch tighter and heavier */
+  :lang(kn) :is(h1, h2, h3),
+  :lang(te) :is(h1, h2, h3) {
+    line-height: 1.3;
+    letter-spacing: 0;
+  }
+
   :focus-visible {
-    outline: 2px solid var(--accent-gold-bright);
+    outline: 2px solid rgb(var(--c-gold-line));
     outline-offset: 3px;
     border-radius: 4px;
   }
 
-  /* Selection colour */
   ::selection {
-    background-color: rgba(107, 70, 193, 0.4);
-    color: #f5f0e8;
+    background-color: rgb(var(--c-gold-line) / 0.35);
+    color: rgb(var(--c-ink));
   }
 
-  /* Scrollbar styling (Webkit) */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #0d0b1e;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(107, 70, 193, 0.5);
-    border-radius: 4px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(107, 70, 193, 0.8);
-  }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: rgb(var(--c-band)); }
+  ::-webkit-scrollbar-thumb { background: rgb(var(--c-line)); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-muted)); }
 
-  /* Anchor defaults */
   a {
     color: inherit;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, opacity 0.2s ease;
   }
 
-  /* Image defaults */
   img, svg {
     display: block;
     max-width: 100%;
   }
 
-  /* Button cursor */
   button {
     cursor: pointer;
   }
 }
 
-/* ─── Star / cosmic background ──────────────────────────────────────────────── */
-@layer base {
-  /* The starfield is painted on a pseudo-element so it sits behind all content */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    background-color: var(--bg-primary);
-
-    /* Layer 1: tiny bright stars */
-    /* Layer 2: medium stars */
-    /* Layer 3: large sparse stars */
-    background-image:
-      radial-gradient(1px 1px at 15%  8%,  rgba(255,255,255,0.9) 0%, transparent 100%),
-      radial-gradient(1px 1px at 42%  3%,  rgba(255,255,255,0.7) 0%, transparent 100%),
-      radial-gradient(1px 1px at 73% 12%,  rgba(255,255,255,0.8) 0%, transparent 100%),
-      radial-gradient(1px 1px at 88%  5%,  rgba(255,255,255,0.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at  6% 22%,  rgba(255,255,255,0.7) 0%, transparent 100%),
-      radial-gradient(1px 1px at 31% 18%,  rgba(255,255,255,0.5) 0%, transparent 100%),
-      radial-gradient(1px 1px at 58% 27%,  rgba(255,255,255,0.8) 0%, transparent 100%),
-      radial-gradient(1px 1px at 79% 33%,  rgba(255,255,255,0.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 94% 41%,  rgba(255,255,255,0.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 23% 47%,  rgba(255,255,255,0.7) 0%, transparent 100%),
-      radial-gradient(1px 1px at 51% 53%,  rgba(255,255,255,0.5) 0%, transparent 100%),
-      radial-gradient(1px 1px at 67% 61%,  rgba(255,255,255,0.8) 0%, transparent 100%),
-      radial-gradient(1px 1px at  9% 68%,  rgba(255,255,255,0.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 84% 72%,  rgba(255,255,255,0.7) 0%, transparent 100%),
-      radial-gradient(1px 1px at 37% 79%,  rgba(255,255,255,0.5) 0%, transparent 100%),
-      radial-gradient(1px 1px at 62% 85%,  rgba(255,255,255,0.8) 0%, transparent 100%),
-      radial-gradient(1px 1px at 19% 91%,  rgba(255,255,255,0.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 46% 96%,  rgba(255,255,255,0.4) 0%, transparent 100%),
-      /* Medium stars */
-      radial-gradient(2px 2px at 25% 15%,  rgba(200,180,255,0.6) 0%, transparent 100%),
-      radial-gradient(2px 2px at 71% 22%,  rgba(200,180,255,0.5) 0%, transparent 100%),
-      radial-gradient(2px 2px at 48% 44%,  rgba(255,220,180,0.5) 0%, transparent 100%),
-      radial-gradient(2px 2px at 89% 58%,  rgba(200,180,255,0.6) 0%, transparent 100%),
-      radial-gradient(2px 2px at 12% 75%,  rgba(255,220,180,0.4) 0%, transparent 100%),
-      radial-gradient(2px 2px at 55% 88%,  rgba(200,180,255,0.5) 0%, transparent 100%),
-      /* Large sparse stars */
-      radial-gradient(3px 3px at 35% 10%,  rgba(255,240,200,0.7) 0%, transparent 100%),
-      radial-gradient(3px 3px at 80% 45%,  rgba(200,180,255,0.6) 0%, transparent 100%),
-      radial-gradient(3px 3px at 10% 60%,  rgba(255,240,200,0.5) 0%, transparent 100%),
-      radial-gradient(3px 3px at 65% 78%,  rgba(200,180,255,0.7) 0%, transparent 100%),
-      /* Nebula glow from top */
-      radial-gradient(ellipse 60% 40% at 50% 0%,  rgba(107,70,193,0.12) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 30% at 80% 20%, rgba(217,119,6,0.07)  0%, transparent 60%),
-      radial-gradient(ellipse 50% 35% at 15% 70%, rgba(107,70,193,0.08) 0%, transparent 60%);
-    pointer-events: none;
-  }
-
-  /* Subtle purple vignette overlay */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background: radial-gradient(
-      ellipse 100% 100% at 50% 50%,
-      transparent 40%,
-      rgba(7, 6, 15, 0.6) 100%
-    );
-    pointer-events: none;
-  }
-}
-
-/* ─── Reusable component utilities ─────────────────────────────────────────── */
+/* ─── Components ────────────────────────────────────────────────────────── */
 @layer components {
-
-  /* ── Buttons ─────────────────────────────────────────────────────────────── */
+  /* Buttons: flat, 8px radius, no glow */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2
-           rounded-full px-7 py-3
-           bg-gradient-to-r from-gold to-gold-bright
-           text-cosmic-black font-semibold text-sm tracking-wide
-           shadow-glow-gold
-           transition-all duration-300 ease-out
-           hover:scale-105 hover:shadow-[0_0_28px_6px_rgba(217,119,6,0.5)]
-           active:scale-95
-           focus-visible:outline-gold-bright;
+    @apply inline-flex min-h-[48px] items-center justify-center gap-2
+           rounded-lg px-6 py-3
+           bg-primary text-on-primary font-semibold text-sm
+           transition-[background-color,transform,opacity] duration-200
+           hover:opacity-90 active:scale-[0.98]
+           disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2
-           rounded-full px-7 py-3
-           border border-violet-bright/60
-           text-violet-glow font-semibold text-sm tracking-wide
-           backdrop-blur-sm
-           transition-all duration-300 ease-out
-           hover:bg-violet/20 hover:border-violet-bright hover:scale-105
-           active:scale-95
-           focus-visible:outline-gold-bright;
+    @apply inline-flex min-h-[48px] items-center justify-center gap-2
+           rounded-lg px-6 py-3
+           border border-cream/25 bg-transparent
+           text-cream font-semibold text-sm
+           transition-colors duration-200
+           hover:border-gold-light hover:text-gold
+           active:scale-[0.98];
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2
-           rounded-full px-6 py-2.5
-           text-silver font-medium text-sm
-           transition-all duration-200 ease-out
-           hover:text-cream hover:bg-white/5
-           active:scale-95
-           focus-visible:outline-gold-bright;
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2
+           rounded-lg px-4 py-2
+           text-cream font-semibold text-sm
+           underline decoration-gold-light decoration-2 underline-offset-[6px]
+           transition-colors duration-200
+           hover:text-gold;
   }
 
-  /* ── Cards ───────────────────────────────────────────────────────────────── */
+  /* Cards: hairline border, quiet lift on hover */
   .card-cosmic {
-    @apply relative rounded-2xl
-           bg-card-gradient border border-cosmic-border
+    @apply relative rounded-card
+           bg-cosmic-card border border-cosmic-border
            shadow-card
-           backdrop-blur-sm
-           transition-all duration-300
-           hover:shadow-card-hover hover:border-violet/40 hover:-translate-y-1;
+           transition-[border-color,box-shadow,transform] duration-300
+           hover:border-gold-light/60 hover:shadow-card-hover;
   }
 
   .card-feature {
     @apply card-cosmic p-6;
   }
 
-  /* ── Section containers ──────────────────────────────────────────────────── */
   .section-dark {
-    @apply bg-section-dark;
+    @apply bg-cosmic-navy;
   }
 
   .section-padding {
     @apply py-16 md:py-24;
   }
 
-  /* ── Dividers ─────────────────────────────────────────────────────────────── */
   .divider-gold {
-    @apply block h-px w-full bg-gradient-to-r from-transparent via-gold to-transparent opacity-50;
+    @apply block h-px w-full bg-gold-light/40;
   }
 
   .divider-violet {
-    @apply block h-px w-full bg-gradient-to-r from-transparent via-violet to-transparent opacity-40;
+    @apply block h-px w-full bg-cosmic-border;
   }
 
-  /* ── Text utilities ──────────────────────────────────────────────────────── */
+  /* Former gradient text: now solid accent colours */
   .text-gradient-gold {
-    @apply bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-transparent;
+    @apply text-gold;
   }
 
   .text-gradient-violet {
-    @apply bg-gradient-to-r from-violet-bright to-violet-glow bg-clip-text text-transparent;
+    @apply text-violet;
   }
 
   .heading-serif {
     @apply font-serif text-cream;
   }
 
-  /* ── Glow decorators ─────────────────────────────────────────────────────── */
-  .glow-dot {
-    @apply inline-block w-1.5 h-1.5 rounded-full bg-gold-bright shadow-glow-gold;
+  /* Small spaced-capitals label used above section titles */
+  .eyebrow {
+    @apply font-sans text-xs font-semibold uppercase tracking-[0.24em] text-gold;
   }
 
-  /* ── Form inputs ──────────────────────────────────────────────────────────── */
+  .glow-dot {
+    @apply inline-block h-1.5 w-1.5 rotate-45 bg-gold-light;
+  }
+
   .input-cosmic {
-    @apply w-full rounded-lg px-4 py-3
+    @apply w-full min-h-[48px] rounded-lg px-4 py-3
            bg-cosmic-card border border-cosmic-border
            text-cream placeholder:text-muted text-sm
-           transition-all duration-200
-           focus:outline-none focus:border-violet-bright focus:shadow-glow-sm
+           transition-[border-color,box-shadow] duration-200
+           focus:outline-none focus:border-gold-light focus:ring-2 focus:ring-gold-light/25
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
@@ -271,65 +221,41 @@
     @apply block text-sm font-medium text-silver mb-1.5;
   }
 
-  /* ── Badge ─────────────────────────────────────────────────────────────────  */
   .badge {
     @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
   }
 
   .badge-gold {
-    @apply badge bg-gold/20 text-gold-bright border border-gold/30;
+    @apply badge bg-gold/10 text-gold border border-gold/30;
   }
 
   .badge-violet {
-    @apply badge bg-violet/20 text-violet-glow border border-violet/30;
+    @apply badge bg-violet/10 text-violet border border-violet/30;
   }
 
-  /* ── Zodiac ring decoration ─────────────────────────────────────────────── */
   .zodiac-ring {
-    @apply absolute rounded-full border border-violet/20 pointer-events-none;
-    animation: rotate-slow 30s linear infinite;
+    @apply absolute rounded-full border border-gold-light/25 pointer-events-none;
+  }
+
+  /* Glass panel: an opaque card in Panchanga */
+  .glass {
+    background: rgb(var(--c-card) / 0.92);
+    border: 1px solid rgb(var(--c-line));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
-/* ─── Utility overrides & helpers ────────────────────────────────────────────  */
+/* ─── Utilities ─────────────────────────────────────────────────────────── */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 
-  .bg-cosmic-deep {
-    background-color: var(--bg-secondary);
-  }
-
-  .bg-cosmic-card {
-    background-color: var(--bg-card);
-  }
-
-  /* Glass morphism panel */
-  .glass {
-    background: rgba(19, 16, 58, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(107, 70, 193, 0.2);
-  }
-
-  /* Noise texture overlay helper */
-  .noise-overlay::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.04;
-    border-radius: inherit;
-  }
-
-  /* Smooth fade-in for page transitions */
   .animate-in {
     animation: fade-up 0.6s ease-out forwards;
   }
 
-  /* Staggered children delay helpers */
   .delay-100 { animation-delay: 100ms; }
   .delay-200 { animation-delay: 200ms; }
   .delay-300 { animation-delay: 300ms; }
@@ -337,127 +263,39 @@
   .delay-500 { animation-delay: 500ms; }
 }
 
-/* ─── Light theme ─────────────────────────────────────────────────────────── */
-html[data-theme='light'] {
-  --bg-primary: #f7f4ef;
-  --bg-secondary: #fffdf9;
-  --bg-section: #eeeaf7;
-  --bg-card: #ffffff;
-  --text-primary: #211b35;
-  --text-secondary: #4b5563;
-  --text-muted: #667085;
-  --border-subtle: rgba(107, 70, 193, 0.2);
-  --border-card: rgba(107, 70, 193, 0.22);
-}
-
-html[data-theme='light'] body::before {
-  opacity: 0.12;
-}
-
-html[data-theme='light'] body::after {
-  background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(255, 255, 255, 0.42) 100%);
-}
-
-html[data-theme='light'] .bg-cosmic-deep { background-color: var(--bg-secondary); }
-html[data-theme='light'] .bg-cosmic-card { background-color: var(--bg-card); }
-html[data-theme='light'] .bg-section-dark { background: linear-gradient(180deg, #fffdf9 0%, #eeeaf7 100%); }
-html[data-theme='light'] .text-cream { color: #211b35; }
-html[data-theme='light'] .text-silver { color: #4b5563; }
-html[data-theme='light'] .text-muted { color: #667085; }
-html[data-theme='light'] .border-cosmic-border { border-color: rgba(107, 70, 193, 0.22); }
-html[data-theme='light'] .card-cosmic { background: #ffffff; box-shadow: 0 4px 24px rgba(42, 32, 96, 0.1); }
-html[data-theme='light'] .glass { background: rgba(255, 255, 255, 0.78); border-color: rgba(107, 70, 193, 0.2); }
-html[data-theme='light'] .input-cosmic { color: #211b35; background: #ffffff; }
-html[data-theme='light'] .btn-ghost:hover { background: rgba(107, 70, 193, 0.08); }
-
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   DESIGN ENHANCEMENTS
-   Pure CSS — no extra JS, no layout changes. All motion is disabled for
-   visitors who prefer reduced motion (see bottom of file).
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Soft starfield behind every page (sits under content, above body colour) */
-body { position: relative; isolation: isolate; }
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    radial-gradient(1.5px 1.5px at 12% 18%, rgba(245, 240, 232, 0.55), transparent 60%),
-    radial-gradient(1px 1px at 28% 72%, rgba(196, 181, 253, 0.6), transparent 60%),
-    radial-gradient(1.5px 1.5px at 47% 33%, rgba(252, 211, 77, 0.45), transparent 60%),
-    radial-gradient(1px 1px at 63% 81%, rgba(245, 240, 232, 0.5), transparent 60%),
-    radial-gradient(1.5px 1.5px at 78% 22%, rgba(196, 181, 253, 0.55), transparent 60%),
-    radial-gradient(1px 1px at 91% 56%, rgba(252, 211, 77, 0.4), transparent 60%),
-    radial-gradient(1px 1px at 36% 9%, rgba(245, 240, 232, 0.45), transparent 60%),
-    radial-gradient(1.5px 1.5px at 7% 63%, rgba(245, 240, 232, 0.4), transparent 60%);
-  background-size: 480px 480px;
-  opacity: 0.55;
-  animation: star-drift 90s linear infinite;
-}
-html[data-theme='light'] body::before { opacity: 0.12; }
-
-@keyframes star-drift { to { background-position: 480px 480px; } }
-
-/* Shimmering gold headline text */
-.text-gradient-gold {
-  background-size: 220% auto;
-  animation: gold-shine 7s ease-in-out infinite;
-}
-@keyframes gold-shine {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
-}
-
-/* Cards: gold edge-glow + lift on hover */
-.card-cosmic {
-  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, border-color 0.35s ease;
-}
-.card-cosmic:hover {
-  border-color: rgba(245, 158, 11, 0.45);
-  box-shadow: 0 14px 44px -8px rgba(107, 70, 193, 0.45), 0 0 0 1px rgba(245, 158, 11, 0.15);
-}
-
-/* Primary button: light sweep on hover */
-.btn-primary { position: relative; overflow: hidden; }
-.btn-primary::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%);
-  transform: translateX(-120%);
-  transition: transform 0.7s ease;
-  pointer-events: none;
-}
-.btn-primary:hover::after { transform: translateX(120%); }
-
-/* Inputs: gold focus ring */
-.input-cosmic:focus {
-  border-color: rgba(245, 158, 11, 0.7);
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
-  outline: none;
-}
-
-/* Public-page sections: cards fade/slide in as they scroll into view.
-   Uses CSS scroll-driven animations (Chrome/Edge/Safari 26+). Browsers
-   without support simply show the cards normally — graceful fallback. */
+/* Cards ease in as they scroll into view (browsers without scroll-driven
+   animations simply show them). */
 @supports (animation-timeline: view()) {
-  section .card-cosmic,
-  section .glass {
+  section .card-cosmic {
     animation: reveal-up linear both;
     animation-timeline: view();
-    animation-range: entry 0% entry 35%;
+    animation-range: entry 0% entry 30%;
   }
 }
 @keyframes reveal-up {
-  from { opacity: 0; transform: translateY(28px) scale(0.98); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: none; }
 }
 
-/* WhatsApp floating button: attention pulse ring */
+/* Founders' portraits: turning rings and a breathing halo (FounderPortrait.tsx) */
+.founder-ring {
+  animation: founder-spin var(--spin, 30s) linear infinite;
+}
+.founder-ring-reverse {
+  animation-direction: reverse;
+}
+.founder-halo {
+  animation: founder-halo 4.5s ease-in-out infinite;
+}
+@keyframes founder-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes founder-halo {
+  0%, 100% { transform: scale(1);    opacity: 0.6; }
+  50%      { transform: scale(1.07); opacity: 0.15; }
+}
+
+/* WhatsApp floating button */
 .whatsapp-pulse {
   position: absolute;
   left: 0; top: 0;
@@ -472,12 +310,14 @@ html[data-theme='light'] body::before { opacity: 0.12; }
   0%   { transform: scale(1);   opacity: 0.55; }
   80%, 100% { transform: scale(1.7); opacity: 0; }
 }
-/* Keep the floating button clear of iOS home bar */
 .whatsapp-fab { margin-bottom: env(safe-area-inset-bottom, 0px); }
 
-/* Respect reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  body::before, .text-gradient-gold, .whatsapp-pulse { animation: none !important; }
-  section .card-cosmic, section .glass { animation: none !important; opacity: 1 !important; transform: none !important; }
-  .btn-primary::after { display: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  section .card-cosmic { animation: none !important; opacity: 1 !important; transform: none !important; }
 }

@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
       <div className="relative z-10 w-full max-w-md">
         {/* Logo */}
         <div className="flex flex-col items-center gap-3 mb-8">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-violet to-gold flex items-center justify-center shadow-glow-violet">
+          <div className="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-glow-violet">
             <Star className="w-7 h-7 text-cosmic-black fill-current" />
           </div>
           <div className="text-center">
@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
             {/* Server error */}
             {serverError && (
-              <div role="alert" className="flex items-center gap-2 rounded-xl border border-red-800/50 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+              <div role="alert" className="flex items-center gap-2 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 {serverError}
               </div>
@@ -80,7 +80,7 @@ export default function AdminLoginPage() {
                 {...register('email')}
               />
               {errors.email && (
-                <p id="login-email-err" role="alert" className="mt-1.5 text-xs text-red-400 flex items-center gap-1.5">
+                <p id="login-email-err" role="alert" className="mt-1.5 text-xs text-danger flex items-center gap-1.5">
                   <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                   {errors.email.message}
                 </p>
@@ -113,7 +113,7 @@ export default function AdminLoginPage() {
                 </button>
               </div>
               {errors.password && (
-                <p id="login-pw-err" role="alert" className="mt-1.5 text-xs text-red-400 flex items-center gap-1.5">
+                <p id="login-pw-err" role="alert" className="mt-1.5 text-xs text-danger flex items-center gap-1.5">
                   <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                   {errors.password.message}
                 </p>

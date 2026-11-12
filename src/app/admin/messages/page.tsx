@@ -21,7 +21,7 @@ export default async function MessagesPage() {
       {result.success ? (
         <MessagesClient initialMessages={result.data} />
       ) : (
-        <div className="flex items-center gap-2 rounded-xl border border-red-800/50 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+        <div className="flex items-center gap-2 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
           <AlertCircle className="w-4 h-4 shrink-0" />
           {result.error}
         </div>

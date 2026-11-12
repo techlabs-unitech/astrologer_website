@@ -62,7 +62,7 @@ export default function TimeSlotSelector({
                 ${isDisabled
                   ? 'border-cosmic-border text-muted/30 cursor-not-allowed bg-transparent line-through'
                   : isSelected
-                    ? 'border-gold bg-gold text-cosmic-black shadow-glow-gold font-bold'
+                    ? 'border-primary bg-primary text-on-primary font-bold'
                     : 'border-cosmic-border text-silver hover:border-violet/50 hover:bg-violet/10 hover:text-cream'
                 }
               `}
