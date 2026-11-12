@@ -18,8 +18,8 @@ const STATUS_OPTIONS: { value: ContactMessageStatus | 'all'; label: string }[] =
 
 const STATUS_CLASSES: Record<ContactMessageStatus, string> = {
   unread:   'bg-yellow-900/40 text-yellow-300 border-yellow-700/40',
-  read:     'bg-blue-900/40 text-blue-300 border-blue-700/40',
-  resolved: 'bg-emerald-900/40 text-emerald-300 border-emerald-700/40',
+  read:     'bg-violet/10 text-violet border-violet/30',
+  resolved: 'bg-success/10 text-success border-success/40',
 }
 
 export default function MessagesClient({ initialMessages }: Props) {
@@ -131,7 +131,7 @@ export default function MessagesClient({ initialMessages }: Props) {
               {/* Header row */}
               <div className="px-5 py-4 flex items-start gap-3">
                 {/* Avatar */}
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet/30 to-gold/20 border border-violet/20 flex items-center justify-center text-xs font-bold text-cream shrink-0">
+                <div className="w-9 h-9 rounded-full border border-gold-light/70 bg-cosmic-card flex items-center justify-center text-xs font-bold text-cream shrink-0">
                   {msg.name.charAt(0).toUpperCase()}
                 </div>
 
@@ -173,7 +173,7 @@ export default function MessagesClient({ initialMessages }: Props) {
                     </select>
 
                     {feedback?.id === msg.id && !isPending && (
-                      <span className={`text-xs ${feedback.type === 'ok' ? 'text-emerald-400' : 'text-red-400'}`}>
+                      <span className={`text-xs ${feedback.type === 'ok' ? 'text-success' : 'text-danger'}`}>
                         {feedback.msg}
                       </span>
                     )}
@@ -181,7 +181,7 @@ export default function MessagesClient({ initialMessages }: Props) {
                     <button type="button"
                       onClick={() => setDeleteConfirm(msg.id)}
                       aria-label={`Delete message from ${msg.name}`}
-                      className="ml-auto flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 transition-colors">
+                      className="ml-auto flex items-center gap-1.5 text-xs text-danger hover:text-danger transition-colors">
                       <Trash2 className="w-3.5 h-3.5" />{t.common.delete}
                     </button>
                   </div>
@@ -214,7 +214,7 @@ export default function MessagesClient({ initialMessages }: Props) {
 
       {/* Global feedback for delete */}
       {feedback && feedback.type === 'ok' && feedback.msg.includes('deleted') && (
-        <div role="status" className="fixed bottom-4 right-4 z-50 rounded-xl border border-emerald-700/40 bg-emerald-900/80 backdrop-blur px-4 py-3 text-sm text-emerald-300">
+        <div role="status" className="fixed bottom-4 right-4 z-50 rounded-xl border border-success/40 bg-cosmic-card backdrop-blur px-4 py-3 text-sm text-success">
           {feedback.msg}
         </div>
       )}

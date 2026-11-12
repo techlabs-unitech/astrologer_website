@@ -29,32 +29,6 @@ const CATEGORY_ICON: Record<string, LucideIcon> = {
   other:         Star,
 }
 
-// ─── Category label / badge / gradient (all full static strings) ──────────────
-
-const CATEGORY_BADGE: Record<string, string> = {
-  consultation: 'bg-violet/20 text-violet-glow border-violet/30',
-  report:       'bg-gold/15 text-gold-bright border-gold/30',
-  relationship: 'bg-pink-900/30 text-pink-300 border-pink-800/40',
-  career:       'bg-blue-900/30 text-blue-300 border-blue-800/40',
-  gemstone:     'bg-emerald-900/30 text-emerald-300 border-emerald-800/40',
-  yantra:       'bg-violet/20 text-violet-glow border-violet/30',
-  rudraksha:    'bg-orange-900/30 text-orange-300 border-orange-800/40',
-  vastu:        'bg-teal-900/30 text-teal-300 border-teal-800/40',
-  other:        'bg-cosmic-border/30 text-muted border-cosmic-border/50',
-}
-
-const ICON_GRADIENT: Record<string, string> = {
-  consultation: 'from-violet to-violet-bright',
-  report:       'from-gold-dim to-gold',
-  relationship: 'from-pink-700 to-pink-500',
-  career:       'from-blue-700 to-blue-500',
-  gemstone:     'from-emerald-700 to-emerald-500',
-  yantra:       'from-violet-bright to-violet-glow',
-  rudraksha:    'from-orange-700 to-orange-500',
-  vastu:        'from-teal-700 to-teal-500',
-  other:        'from-violet/60 to-gold/40',
-}
-
 // ─── Component ────────────────────────────────────────────────────────────────
 
 interface LiveProductCardProps {
@@ -65,8 +39,6 @@ export default function LiveProductCard({ product }: LiveProductCardProps) {
   const { t, language } = useLanguage()
   const { name, description } = localizeProduct(product, language)
   const Icon         = CATEGORY_ICON[product.category] ?? Star
-  const badgeClass   = CATEGORY_BADGE[product.category] ?? CATEGORY_BADGE.other
-  const gradientClass= ICON_GRADIENT[product.category]  ?? 'from-violet to-gold'
   const categoryLabel = ({
     consultation: t.common.consultations,
     report: t.common.reports,
@@ -81,69 +53,49 @@ export default function LiveProductCard({ product }: LiveProductCardProps) {
   const bookingHref  = `/shop/booking?product=${encodeURIComponent(product.id)}`
 
   return (
-    <article
-      className="relative card-cosmic flex flex-col gap-0 overflow-hidden group"
-      aria-label={name}
-    >
-      {/* Product image (only when image_url is set) */}
-      {product.image_url && (
-        <div className="relative w-full h-44 overflow-hidden">
+    <article className="card-cosmic group flex h-full flex-col overflow-hidden" aria-label={name}>
+      {/* Image, or a night-panel emblem when the product has none */}
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-night-panel">
+        {product.image_url ? (
           <Image
             src={product.image_url}
             alt={name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 25vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-cosmic-card/80" />
-        </div>
-      )}
-
-      {/* Card body */}
-      <div className="flex flex-col gap-4 p-6 flex-1">
-        {/* Icon + category row */}
-        <div className="flex items-start justify-between gap-3">
-          <div
-            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradientClass} flex items-center justify-center shadow-glow-sm shrink-0 transition-transform duration-300 group-hover:scale-110`}
-            aria-hidden="true"
-          >
-            <Icon className="w-6 h-6 text-white" />
-          </div>
-
-          <span className={`badge border text-[10px] px-2 py-0.5 whitespace-nowrap ${badgeClass}`}>
-            {categoryLabel}
+        ) : (
+          <span className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full border border-saffron/70 text-saffron">
+              <Icon className="h-7 w-7" />
+            </span>
           </span>
-        </div>
-
-        {/* Title */}
-        <h3 className="font-serif text-cream font-semibold text-lg leading-snug">
-          {name}
-        </h3>
-
-        {/* Description */}
-        <p className="text-muted text-sm leading-relaxed flex-1">
-          {description}
-        </p>
+        )}
       </div>
 
-      {/* Card footer — price + CTA */}
-      <div className="px-6 pb-6 pt-4 border-t border-cosmic-border flex items-center justify-between gap-4">
-        <div className="flex flex-col gap-0.5">
-          <span className="text-muted text-[10px] uppercase tracking-widest">
-            {t.common.startingFrom}
-          </span>
-          <span className="font-serif text-2xl font-bold text-gradient-gold">
+      <div className="flex flex-1 flex-col gap-3 p-6">
+        <span className="eyebrow flex items-center gap-2 text-muted">
+          <Icon className="h-3.5 w-3.5 text-gold" aria-hidden="true" />
+          {categoryLabel}
+        </span>
+        <h3 className="font-serif text-2xl font-bold leading-snug text-cream">{name}</h3>
+        <p className="line-clamp-3 flex-1 text-[15px] leading-relaxed text-silver">{description}</p>
+      </div>
+
+      <div className="flex items-end justify-between gap-4 border-t border-cosmic-border px-6 pb-6 pt-4">
+        <div className="flex flex-col gap-1">
+          <span className="eyebrow text-[10px] text-muted">{t.common.startingFrom}</span>
+          <span className="font-serif text-3xl font-semibold leading-none text-cream">
             ₹{product.price.toLocaleString('en-IN')}
           </span>
         </div>
-
         <Link
           href={bookingHref}
-          className="btn-primary text-xs px-5 py-2.5 shrink-0"
+          className="btn-primary min-h-[44px] shrink-0 px-4 text-sm"
           aria-label={`${t.common.bookNow}: ${name}`}
         >
           {t.common.bookNow}
-          <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       </div>
     </article>

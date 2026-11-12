@@ -18,7 +18,7 @@ export default function ShopBenefits() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {items.map(({ icon: Icon, title, desc }) => (
         <Card key={title} accent className="p-6 flex flex-col gap-4 text-center items-center">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet/20 to-gold/10 border border-violet/20 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl border border-gold-light/70 flex items-center justify-center">
             <Icon className="w-6 h-6 text-gold-bright" aria-hidden="true" />
           </div>
           <h3 className="font-serif text-cream font-semibold">{title}</h3>

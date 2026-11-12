@@ -40,26 +40,16 @@ const FALLBACK_ICON = Star
 const CATEGORY_BADGE: Record<string, string> = {
   consultation: 'bg-violet/20 text-violet-glow border-violet/30',
   report:       'bg-gold/15 text-gold-bright border-gold/30',
-  relationship: 'bg-pink-900/30 text-pink-300 border-pink-800/40',
-  career:       'bg-blue-900/30 text-blue-300 border-blue-800/40',
-  gemstone:     'bg-emerald-900/30 text-emerald-300 border-emerald-800/40',
+  relationship: 'bg-gold/10 text-gold border-gold/30',
+  career:       'bg-gold/10 text-gold border-gold/30',
+  gemstone:     'bg-gold/10 text-gold border-gold/30',
   yantra:       'bg-violet/20 text-violet-glow border-violet/30',
-  rudraksha:    'bg-orange-900/30 text-orange-300 border-orange-800/40',
+  rudraksha:    'bg-gold/10 text-gold border-gold/30',
   other:        'bg-cosmic-border/30 text-muted border-cosmic-border/50',
 }
 
 // ─── Icon background gradient map ────────────────────────────────────────────
 
-const ICON_GRADIENT: Record<string, string> = {
-  consultation: 'from-violet to-violet-bright',
-  report:       'from-gold-dim to-gold',
-  relationship: 'from-pink-700 to-pink-500',
-  career:       'from-blue-700 to-blue-500',
-  gemstone:     'from-emerald-700 to-emerald-500',
-  yantra:       'from-violet-bright to-violet-glow',
-  rudraksha:    'from-orange-700 to-orange-500',
-  other:        'from-violet/60 to-gold/40',
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -71,7 +61,6 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { t } = useLanguage()
   const Icon = ICON_MAP[product.icon] ?? FALLBACK_ICON
   const badgeClass = CATEGORY_BADGE[product.category] ?? CATEGORY_BADGE.other
-  const gradientClass = ICON_GRADIENT[product.category] ?? 'from-violet to-gold'
   const categoryLabel = ({
     consultation: t.common.consultations,
     report: t.common.reports,
@@ -97,7 +86,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Gold top-accent line on featured */}
       {product.featured && (
         <span
-          className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent"
+          className="absolute inset-x-0 top-0 h-[2px] bg-gold-light/60"
           aria-hidden="true"
         />
       )}
@@ -107,10 +96,10 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Icon + category row */}
         <div className="flex items-start justify-between gap-3">
           <div
-            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradientClass} flex items-center justify-center shadow-glow-sm shrink-0 transition-transform duration-300 group-hover:scale-110`}
+            className={`w-12 h-12 rounded-xl border border-gold-light/70 text-gold flex items-center justify-center shadow-glow-sm shrink-0 transition-transform duration-300 group-hover:scale-110`}
             aria-hidden="true"
           >
-            <Icon className="w-6 h-6 text-white" />
+            <Icon className="w-6 h-6" />
           </div>
 
           <span

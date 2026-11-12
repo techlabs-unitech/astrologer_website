@@ -64,8 +64,8 @@ export default function BookingSummary({
         {/* Service highlight */}
         <div className="flex items-center justify-between gap-4 pb-4 border-b border-cosmic-border">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet to-gold flex items-center justify-center shadow-glow-sm">
-              <Star className="w-5 h-5 text-white fill-current" aria-hidden="true" />
+            <div className="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-glow-sm">
+              <Star className="w-5 h-5 fill-current" aria-hidden="true" />
             </div>
             <div>
               <p className="text-muted text-[10px] uppercase tracking-widest mb-0.5">{t.common.service}</p>
@@ -110,7 +110,7 @@ export default function BookingSummary({
       {error && (
         <div
           role="alert"
-          className="rounded-xl border border-red-800/50 bg-red-950/30 px-4 py-3 text-sm text-red-300 flex items-start gap-2"
+          className="rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger flex items-start gap-2"
         >
           <span className="shrink-0 mt-0.5" aria-hidden="true">⚠</span>
           {error}

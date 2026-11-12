@@ -50,7 +50,7 @@ export default function ProductFilters({ products, categories }: ProductFiltersP
                   border transition-all duration-200
                   focus-visible:outline-2 focus-visible:outline-gold-bright focus-visible:outline-offset-2
                   ${isActive
-                    ? 'bg-gold text-cosmic-black border-gold shadow-glow-gold'
+                    ? 'bg-primary text-on-primary border-primary'
                     : 'bg-transparent text-silver border-cosmic-border hover:border-violet/50 hover:text-cream hover:bg-violet/10'
                   }
                 `}

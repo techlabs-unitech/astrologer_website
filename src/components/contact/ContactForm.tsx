@@ -17,7 +17,7 @@ import { useLanguage } from '@/components/LanguageProvider'
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return (
-    <p role="alert" className="flex items-center gap-1.5 mt-1.5 text-xs text-red-400">
+    <p role="alert" className="flex items-center gap-1.5 mt-1.5 text-xs text-danger">
       <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
       {message}
     </p>
@@ -66,7 +66,7 @@ export default function ContactForm() {
   if (submitted) {
     return (
       <div className="flex flex-col items-center justify-center gap-5 py-16 text-center">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/30 to-violet/20 border border-gold/40 flex items-center justify-center">
+        <div className="w-16 h-16 rounded-full border border-gold-light/70 flex items-center justify-center">
           <CheckCircle className="w-8 h-8 text-gold-bright" aria-hidden="true" />
         </div>
         <div className="flex flex-col gap-2">
@@ -101,7 +101,7 @@ export default function ContactForm() {
       {serverError && (
         <div
           role="alert"
-          className="flex items-start gap-2 rounded-xl border border-red-800/50 bg-red-950/30 px-4 py-3 text-sm text-red-300"
+          className="flex items-start gap-2 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger"
         >
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
           {serverError}
@@ -112,7 +112,7 @@ export default function ContactForm() {
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
           <label htmlFor="cf-name" className="label-cosmic">
-            {t.common.fullName} <span className="text-red-400" aria-hidden="true">*</span>
+            {t.common.fullName} <span className="text-danger" aria-hidden="true">*</span>
           </label>
           <input
             id="cf-name"
@@ -132,7 +132,7 @@ export default function ContactForm() {
 
         <div>
           <label htmlFor="cf-email" className="label-cosmic">
-            {t.common.email} <span className="text-red-400" aria-hidden="true">*</span>
+            {t.common.email} <span className="text-danger" aria-hidden="true">*</span>
           </label>
           <input
             id="cf-email"
@@ -175,7 +175,7 @@ export default function ContactForm() {
 
         <div>
           <label htmlFor="cf-subject" className="label-cosmic">
-            {t.common.subject} <span className="text-red-400" aria-hidden="true">*</span>
+            {t.common.subject} <span className="text-danger" aria-hidden="true">*</span>
           </label>
           <select
             id="cf-subject"
@@ -203,7 +203,7 @@ export default function ContactForm() {
       {/* Row 3 — Message */}
       <div>
         <label htmlFor="cf-message" className="label-cosmic">
-          {t.common.message} <span className="text-red-400" aria-hidden="true">*</span>
+          {t.common.message} <span className="text-danger" aria-hidden="true">*</span>
         </label>
         <textarea
           id="cf-message"

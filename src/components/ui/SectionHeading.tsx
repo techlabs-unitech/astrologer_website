@@ -1,14 +1,19 @@
 import type { ReactNode } from 'react'
 
 interface SectionHeadingProps {
-  /** Small label shown above the main title */
+  /** Small spaced-capitals label shown above the title */
   label?: ReactNode
   title: ReactNode
-  /** Part of the title to highlight in gold gradient */
+  /** Part of the title to set in the violet accent colour */
   highlight?: ReactNode
   subtitle?: ReactNode
   /** Alignment. Defaults to 'center' */
   align?: 'left' | 'center'
+  /**
+   * 'split' puts the subtitle to the right of the title on wide screens
+   * (the Panchanga section header). Defaults to 'stacked'.
+   */
+  layout?: 'stacked' | 'split'
   className?: string
   /** Optional id for the h2 — use with aria-labelledby on the section */
   id?: string
@@ -20,53 +25,62 @@ export default function SectionHeading({
   highlight,
   subtitle,
   align = 'center',
+  layout = 'stacked',
   className = '',
   id,
 }: SectionHeadingProps) {
-  const alignClass = align === 'center' ? 'text-center items-center' : 'text-left items-start'
-
-  // If a highlight word/phrase is provided, split the title around it
   const renderTitle = () => {
-    if (!highlight) return <span>{title}</span>
+    if (!highlight) return title
     if (typeof title !== 'string' || typeof highlight !== 'string') {
-      return <><span>{title}</span> <span className="text-gradient-gold">{highlight}</span></>
+      return (
+        <>
+          {title} <span className="text-violet">{highlight}</span>
+        </>
+      )
     }
-    const parts = title.split(highlight)
+    const index = title.indexOf(highlight)
+    if (index === -1) {
+      return (
+        <>
+          {title} <span className="text-violet">{highlight}</span>
+        </>
+      )
+    }
     return (
       <>
-        {parts[0]}
-        <span className="text-gradient-gold">{highlight}</span>
-        {parts[1]}
+        {title.slice(0, index)}
+        <span className="text-violet">{highlight}</span>
+        {title.slice(index + highlight.length)}
       </>
     )
   }
 
-  return (
-    <div className={`flex flex-col gap-3 ${alignClass} ${className}`}>
-      {label && (
-        <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-gold-bright">
-          <span className="glow-dot" aria-hidden="true" />
-          {label}
-          <span className="glow-dot" aria-hidden="true" />
-        </span>
-      )}
-
-      <h2 id={id} className="heading-serif text-3xl sm:text-4xl md:text-5xl font-bold text-balance">
+  const heading = (
+    <div className="flex flex-col gap-3">
+      {label && <span className="eyebrow">{label}</span>}
+      <h2 id={id} className="heading-serif text-balance text-3xl font-bold sm:text-4xl md:text-5xl">
         {renderTitle()}
       </h2>
+    </div>
+  )
 
-      {subtitle && (
-        <p className="max-w-2xl text-silver text-base sm:text-lg leading-relaxed">
-          {subtitle}
-        </p>
-      )}
-
-      {/* Decorative divider */}
-      <div className={`flex items-center gap-3 mt-1 ${align === 'center' ? 'justify-center' : ''}`}>
-        <span className="h-px w-10 bg-gradient-to-r from-transparent to-gold opacity-70" />
-        <span className="text-gold text-lg" aria-hidden="true">✦</span>
-        <span className="h-px w-10 bg-gradient-to-l from-transparent to-gold opacity-70" />
+  if (layout === 'split') {
+    return (
+      <div className={`flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-16 ${className}`}>
+        {heading}
+        {subtitle && (
+          <p className="max-w-xl text-base leading-relaxed text-silver lg:text-right">{subtitle}</p>
+        )}
       </div>
+    )
+  }
+
+  const alignClass = align === 'center' ? 'items-center text-center' : 'items-start text-left'
+
+  return (
+    <div className={`flex flex-col gap-4 ${alignClass} ${className}`}>
+      {heading}
+      {subtitle && <p className="max-w-2xl text-base leading-relaxed text-silver sm:text-lg">{subtitle}</p>}
     </div>
   )
 }

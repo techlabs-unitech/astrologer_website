@@ -165,8 +165,8 @@ export default function ShopCheckout({ product }: { product: Product }) {
       {/* ── Success ─────────────────────────────────────────────────────── */}
       {phase === 'success' && paidInfo ? (
         <div className="card-cosmic p-8 sm:p-10 flex flex-col items-center gap-5 text-center animate-in" role="status">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/30 to-gold/20 border border-emerald-400/40 flex items-center justify-center">
-            <CheckCircle className="w-8 h-8 text-emerald-300" aria-hidden="true" />
+          <div className="w-16 h-16 rounded-full border border-success/40 bg-success/10 flex items-center justify-center">
+            <CheckCircle className="w-8 h-8 text-success" aria-hidden="true" />
           </div>
           <h2 className="heading-serif text-2xl font-semibold">{t.common.paymentSuccessTitle}</h2>
           <p className="text-silver text-sm max-w-md leading-relaxed">{t.common.paymentSuccessText}</p>
@@ -195,7 +195,7 @@ export default function ShopCheckout({ product }: { product: Product }) {
           </div>
 
           {error && (
-            <div role="alert" className="flex items-start gap-2 rounded-xl border border-red-800/50 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+            <div role="alert" className="flex items-start gap-2 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
               {error}
             </div>

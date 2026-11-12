@@ -128,7 +128,7 @@ export default function DateSelector({
                   ${isDisabled
                     ? 'text-muted/30 cursor-not-allowed'
                     : isSelected
-                      ? 'bg-gold text-cosmic-black shadow-glow-gold font-bold'
+                      ? 'bg-primary text-on-primary font-bold'
                       : isToday
                         ? 'border border-violet/60 text-violet-glow hover:bg-violet/20'
                         : 'text-silver hover:bg-violet/15 hover:text-cream'

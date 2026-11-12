@@ -1,94 +1,62 @@
 'use client'
 
 import Link from 'next/link'
-import { Star, Mail, Phone, MapPin, Share2, Heart, Rss } from 'lucide-react'
+import { Mail, Phone, MapPin } from 'lucide-react'
+import SocialLinks from '@/components/ui/SocialLinks'
 import { useLanguage } from '@/components/LanguageProvider'
+import { CONTACT } from '@/lib/contact-info'
 
-const FOOTER_LINKS = {
-  // Every link now goes to a DIFFERENT, relevant page (they all pointed to /shop before)
-  services: [
-    { href: '/appointment?service=detailed-birth-chart' },
-    { href: '/appointment?service=love-relationship-reading' },
-    { href: '/appointment?service=career-astrology-consultation' },
-    { href: '/services' },
-    { href: '/services' },
-  ],
-  quickLinks: [
-    { href: '/about' },
-    { href: '/services' },
-    { href: '/shop' },
-    { href: '/appointment' },
-    { href: '/contact' },
-  ],
-}
-
-const SOCIAL_LINKS = [
-  { label: 'Facebook',  href: '#', icon: Share2 },
-  { label: 'Instagram', href: '#', icon: Heart },
-  { label: 'YouTube',   href: '#', icon: Rss },
+const SERVICE_HREFS = [
+  '/appointment?service=detailed-birth-chart',
+  '/appointment?service=love-relationship-reading',
+  '/appointment?service=career-astrology-consultation',
+  '/services',
+  '/services',
 ]
+
+function ColumnHeading({ children }: { children: React.ReactNode }) {
+  return <h3 className="eyebrow mb-5 text-muted">{children}</h3>
+}
 
 export default function Footer() {
   const year = new Date().getFullYear()
   const { t } = useLanguage()
-  const [birthChart, love, career, , , vastu] = t.services.servicesList
-  const footerServices = [birthChart.title, love.title, career.title, t.services.servicesList[4].title, vastu.title]
-  const quickLinks = [t.nav.about, t.nav.services, t.nav.shop, t.nav.appointment, t.nav.contact]
+  const list = t.services.servicesList
+  const footerServices = [list[0].title, list[1].title, list[2].title, list[4].title, list[5].title]
+  const quickLinks = [
+    { label: t.nav.about, href: '/about' },
+    { label: t.nav.services, href: '/services' },
+    { label: t.nav.astrology, href: '/astrology' },
+    { label: t.nav.shop, href: '/shop' },
+    { label: t.nav.appointment, href: '/appointment' },
+    { label: t.nav.contact, href: '/contact' },
+  ]
+
+  const linkClass = 'text-[15px] text-silver transition-colors hover:text-gold'
 
   return (
-    <footer className="relative border-t border-cosmic-border bg-cosmic-deep/80 mt-auto">
-      {/* Top gold divider glow */}
-      <span className="divider-gold absolute top-0 inset-x-0" aria-hidden="true" />
-
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-        {/* ── Main footer grid ────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 py-14">
-
-          {/* Brand column */}
-          <div className="lg:col-span-1 flex flex-col gap-4">
-            <Link href="/" className="flex items-center gap-2.5 w-fit">
-              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-violet to-gold shadow-glow-sm">
-                <Star className="w-4 h-4 text-cosmic-black fill-current" />
-              </span>
-              <span className="font-serif text-xl font-bold">
-                <span className="text-cream">SaiBaba</span>
-                <span className="text-gradient-gold">Astro</span>
+    <footer className="mt-auto border-t border-cosmic-border bg-cosmic-deep">
+      <div className="mx-auto max-w-[84rem] px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+          {/* Brand */}
+          <div className="flex flex-col gap-4">
+            <Link href="/" className="flex w-fit flex-col leading-none">
+              <span className="font-serif text-[28px] font-semibold text-cream">Sai Baba Astrology</span>
+              <span className="mt-1.5 font-sans text-[10px] font-semibold uppercase tracking-[0.24em] text-gold">
+                {t.nav.brandTagline}
               </span>
             </Link>
-
-            <p className="text-muted text-sm leading-relaxed">
-              {t.home.astrologyDescription2}
-            </p>
-
-            {/* Social links */}
-            <div className="flex items-center gap-3 mt-1">
-              {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className="flex items-center justify-center w-9 h-9 rounded-full border border-cosmic-border text-muted hover:text-gold-bright hover:border-gold/40 transition-all duration-200"
-                >
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
-            </div>
+            <p className="max-w-sm text-sm leading-relaxed text-silver">{t.home.astrologyDescription2}</p>
+            <SocialLinks className="mt-1" />
           </div>
 
           {/* Services */}
           <div>
-            <h3 className="font-serif text-cream font-semibold mb-4 text-sm tracking-wide uppercase">
-              {t.common.footerServices}
-            </h3>
-            <ul className="flex flex-col gap-2.5" role="list">
-              {FOOTER_LINKS.services.map((link, index) => (
-                <li key={`${link.href}-${index}`}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted hover:text-gold-bright transition-colors duration-200 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 rounded-full bg-violet group-hover:bg-gold-bright transition-colors" aria-hidden="true" />
+            <ColumnHeading>{t.common.footerServices}</ColumnHeading>
+            <ul className="flex flex-col gap-3" role="list">
+              {SERVICE_HREFS.map((href, index) => (
+                <li key={`${href}-${index}`}>
+                  <Link href={href} className={linkClass}>
                     {footerServices[index]}
                   </Link>
                 </li>
@@ -98,72 +66,51 @@ export default function Footer() {
 
           {/* Quick links */}
           <div>
-            <h3 className="font-serif text-cream font-semibold mb-4 text-sm tracking-wide uppercase">
-              {t.common.quickLinks}
-            </h3>
-            <ul className="flex flex-col gap-2.5" role="list">
-              {FOOTER_LINKS.quickLinks.map((link, index) => (
-                <li key={`${link.href}-${index}`}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted hover:text-gold-bright transition-colors duration-200 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 rounded-full bg-violet group-hover:bg-gold-bright transition-colors" aria-hidden="true" />
-                    {quickLinks[index]}
+            <ColumnHeading>{t.common.quickLinks}</ColumnHeading>
+            <ul className="flex flex-col gap-3" role="list">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className={linkClass}>
+                    {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact info */}
+          {/* Contact */}
           <div>
-            <h3 className="font-serif text-cream font-semibold mb-4 text-sm tracking-wide uppercase">
-              {t.common.contact}
-            </h3>
-            <ul className="flex flex-col gap-3" role="list">
+            <ColumnHeading>{t.common.contact}</ColumnHeading>
+            <ul className="flex flex-col gap-3.5" role="list">
               <li>
-                <a
-                  href="mailto:info@saibabaastro.store"
-                  className="flex items-start gap-3 text-sm text-muted hover:text-gold-bright transition-colors duration-200 group break-all"
-                >
-                  <Mail className="w-4 h-4 mt-0.5 text-violet-bright group-hover:text-gold-bright transition-colors shrink-0" />
-                  info@saibabaastro.store
+                <a href={`mailto:${CONTACT.email}`} className={`flex items-start gap-3 break-all ${linkClass}`}>
+                  <Mail className="mt-1 h-4 w-4 shrink-0 text-gold" aria-hidden="true" />
+                  {CONTACT.email}
                 </a>
               </li>
               <li>
-                <a
-                  href="tel:+919972049339"
-                  className="flex items-start gap-3 text-sm text-muted hover:text-gold-bright transition-colors duration-200 group"
-                >
-                  <Phone className="w-4 h-4 mt-0.5 text-violet-bright group-hover:text-gold-bright transition-colors shrink-0" />
-                  +91 99720 49339
+                <a href={CONTACT.phoneHref} className={`flex items-start gap-3 ${linkClass}`}>
+                  <Phone className="mt-1 h-4 w-4 shrink-0 text-gold" aria-hidden="true" />
+                  {CONTACT.phoneDisplay}
                 </a>
               </li>
-              <li className="flex items-start gap-3 text-sm text-muted">
-                <MapPin className="w-4 h-4 mt-0.5 text-violet-bright shrink-0" />
-                Chintamani Taluk, Chikkaballapura District, Karnataka - 563161
+              <li className="flex items-start gap-3 text-[15px] text-silver">
+                <MapPin className="mt-1 h-4 w-4 shrink-0 text-gold" aria-hidden="true" />
+                {CONTACT.address}
               </li>
             </ul>
 
-            {/* Working hours */}
-            <div className="mt-4 pt-4 border-t border-cosmic-border">
-              <p className="text-xs font-semibold uppercase tracking-widest text-gold-bright mb-2">
-                {t.common.hours}
-              </p>
-              <p className="text-xs text-muted">{t.common.mondaySaturday}</p>
-              <p className="text-xs text-muted">{t.common.sundayByAppointment}</p>
+            <div className="mt-6 border-t border-cosmic-border pt-5">
+              <p className="eyebrow mb-2">{t.common.hours}</p>
+              <p className="text-sm text-silver">{t.common.mondaySaturday}</p>
+              <p className="text-sm text-silver">{t.common.sundayByAppointment}</p>
             </div>
           </div>
         </div>
 
-        {/* ── Bottom bar ───────────────────────────────────────────────────── */}
-        <div className="border-t border-cosmic-border py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
-          <p>© {year} SaiBabaAstro. All rights reserved | Design by Unitechlabs</p>
-          <p className="flex items-center gap-1.5">
-            <Star className="w-3 h-3 text-gold-bright fill-current" aria-hidden="true" />
-            {t.home.eyebrow}
-          </p>
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-cosmic-border py-6 text-sm text-muted sm:flex-row">
+          <p>© {year} Sai Baba Astrology. All rights reserved · Design by Unitechlabs</p>
+          <p>{t.home.eyebrow}</p>
         </div>
       </div>
     </footer>

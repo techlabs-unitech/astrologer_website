@@ -19,9 +19,9 @@ const STATUS_OPTIONS: { value: AppointmentStatus | 'all'; label: string }[] = [
 
 const STATUS_CLASSES: Record<AppointmentStatus, string> = {
   pending:   'bg-yellow-900/40 text-yellow-300 border-yellow-700/40',
-  confirmed: 'bg-emerald-900/40 text-emerald-300 border-emerald-700/40',
-  completed: 'bg-blue-900/40 text-blue-300 border-blue-700/40',
-  cancelled: 'bg-red-900/40 text-red-300 border-red-700/40',
+  confirmed: 'bg-success/10 text-success border-success/40',
+  completed: 'bg-violet/10 text-violet border-violet/30',
+  cancelled: 'bg-danger/10 text-danger border-danger/40',
 }
 
 export default function AppointmentsClient({ initialAppointments }: Props) {
@@ -125,7 +125,7 @@ export default function AppointmentsClient({ initialAppointments }: Props) {
               </thead>
               <tbody>
                 {filtered.map(appt => (
-                  <tr key={appt.id} className="border-b border-cosmic-border/50 hover:bg-white/2 transition-colors">
+                  <tr key={appt.id} className="border-b border-cosmic-border/50 hover:bg-cream/[0.03] transition-colors">
                     <td className="px-4 py-3 text-cream font-medium">{appt.name}</td>
                     <td className="px-4 py-3">
                       <p className="text-silver text-xs">{appt.email}</p>
@@ -157,8 +157,8 @@ export default function AppointmentsClient({ initialAppointments }: Props) {
                         {isPending && feedback?.id === appt.id && <Loader2 className="w-3.5 h-3.5 animate-spin text-muted" />}
                         {!isPending && feedback?.id === appt.id && (
                           feedback.type === 'ok'
-                            ? <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
-                            : <AlertCircle className="w-3.5 h-3.5 text-red-400" />
+                            ? <CheckCircle className="w-3.5 h-3.5 text-success" />
+                            : <AlertCircle className="w-3.5 h-3.5 text-danger" />
                         )}
                       </div>
                     </td>
@@ -202,7 +202,7 @@ export default function AppointmentsClient({ initialAppointments }: Props) {
                 </select>
               </div>
               {feedback?.id === appt.id && !isPending && (
-                <p className={`text-xs ${feedback.type === 'ok' ? 'text-emerald-400' : 'text-red-400'}`}>
+                <p className={`text-xs ${feedback.type === 'ok' ? 'text-success' : 'text-danger'}`}>
                   {feedback.msg}
                 </p>
               )}

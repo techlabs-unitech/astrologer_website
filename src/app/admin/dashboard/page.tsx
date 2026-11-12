@@ -14,9 +14,9 @@ export const metadata: Metadata = { title: 'Dashboard' }
 // Status badge colours — full static strings
 const APPT_STATUS_CLASSES: Record<string, string> = {
   pending:   'bg-yellow-900/40 text-yellow-300 border-yellow-700/40',
-  confirmed: 'bg-emerald-900/40 text-emerald-300 border-emerald-700/40',
-  completed: 'bg-blue-900/40 text-blue-300 border-blue-700/40',
-  cancelled: 'bg-red-900/40 text-red-300 border-red-700/40',
+  confirmed: 'bg-success/10 text-success border-success/40',
+  completed: 'bg-violet/10 text-violet border-violet/30',
+  cancelled: 'bg-danger/10 text-danger border-danger/40',
 }
 
 export default async function DashboardPage() {
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
 
       {/* Errors */}
       {(!apptResult.success || !prodResult.success || !msgResult.success || !orderResult.success) && (
-        <div className="flex items-center gap-2 rounded-xl border border-red-800/50 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+        <div className="flex items-center gap-2 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
           <AlertCircle className="w-4 h-4 shrink-0" />
           Some data could not be loaded. Please refresh.
         </div>
@@ -104,8 +104,8 @@ export default async function DashboardPage() {
           const Icon = s.icon
           return (
             <div key={s.label} className="card-cosmic p-5 flex flex-col gap-3">
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center shadow-glow-sm shrink-0`}>
-                <Icon className="w-5 h-5 text-white" aria-hidden="true" />
+              <div className="w-10 h-10 rounded-full border border-gold-light/70 text-gold flex items-center justify-center shrink-0">
+                <Icon className="w-5 h-5" aria-hidden="true" />
               </div>
               <div>
                 <p className="font-serif text-2xl font-bold text-cream">{s.value}</p>
@@ -136,7 +136,7 @@ export default async function DashboardPage() {
               </thead>
               <tbody>
                 {recentAppointments.map(appt => (
-                  <tr key={appt.id} className="border-b border-cosmic-border/50 hover:bg-white/2 transition-colors">
+                  <tr key={appt.id} className="border-b border-cosmic-border/50 hover:bg-cream/[0.03] transition-colors">
                     <td className="px-4 py-3 text-cream font-medium">{appt.name}</td>
                     <td className="px-4 py-3 text-silver max-w-[180px] truncate">{appt.service}</td>
                     <td className="px-4 py-3 text-silver whitespace-nowrap">

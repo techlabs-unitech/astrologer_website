@@ -1,288 +1,208 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Languages, Sun, Moon } from 'lucide-react'
+import { Menu, X, Sun, Moon } from 'lucide-react'
 import { useLanguage } from '@/components/LanguageProvider'
 import { useTheme } from '@/components/ThemeProvider'
+import type { Language } from '@/translations/translations'
 
 const NAV_LINKS = [
-  { label: 'Home',        href: '/' },
-  { label: 'About',       href: '/about' },
-  { label: 'Services',    href: '/services' },
-  { label: 'Appointment', href: '/appointment' },
-  { label: 'Contact',     href: '/contact' },
-  { label: 'Shop',        href: '/shop' },
+  { key: 'home', href: '/' },
+  { key: 'about', href: '/about' },
+  { key: 'services', href: '/services' },
+  { key: 'astrology', href: '/astrology' },
+  { key: 'appointment', href: '/appointment' },
+  { key: 'contact', href: '/contact' },
+  { key: 'shop', href: '/shop' },
+] as const
+
+const LANGUAGES: Array<{ code: Language; short: string; full: string }> = [
+  { code: 'kn', short: 'ಕ', full: 'ಕನ್ನಡ' },
+  { code: 'en', short: 'EN', full: 'English' },
+  { code: 'te', short: 'తె', full: 'తెలుగు' },
 ]
 
-export default function Navbar() {
-  const { language, setLanguage, t } = useLanguage()
-  const { theme, toggleTheme } = useTheme()
-  const [isOpen, setIsOpen] = useState(false)
-  const [languageOpen, setLanguageOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+function isActivePath(pathname: string, href: string) {
+  return href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`)
+}
 
+function LanguageSwitch({ className = '', tabIndex }: { className?: string; tabIndex?: number }) {
+  const { language, setLanguage, t } = useLanguage()
+  return (
+    <div
+      role="group"
+      aria-label={t.nav.language}
+      className={`flex overflow-hidden rounded-lg border border-cosmic-border text-sm ${className}`}
+    >
+      {LANGUAGES.map((lang) => {
+        const active = lang.code === language
+        return (
+          <button
+            key={lang.code}
+            type="button"
+            lang={lang.code}
+            onClick={() => setLanguage(lang.code)}
+            aria-pressed={active}
+            aria-label={lang.full}
+            title={lang.full}
+            tabIndex={tabIndex}
+            className={`min-h-[44px] min-w-[44px] px-3 font-semibold transition-colors ${
+              active ? 'bg-primary text-on-primary' : 'text-silver hover:text-cream hover:bg-cream/5'
+            }`}
+          >
+            {lang.short}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function ThemeToggle({ className = '' }: { className?: string }) {
+  const { theme, toggleTheme } = useTheme()
+  const { t } = useLanguage()
+  const label = theme === 'dark' ? t.common.themeLight : t.common.themeDark
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      aria-label={label}
+      title={label}
+      className={`flex h-11 w-11 items-center justify-center rounded-lg border border-cosmic-border text-cream transition-colors hover:border-gold-light hover:text-gold ${className}`}
+    >
+      {theme === 'dark' ? <Sun className="h-[18px] w-[18px]" aria-hidden="true" /> : <Moon className="h-[18px] w-[18px]" aria-hidden="true" />}
+    </button>
+  )
+}
+
+export default function Navbar() {
+  const { t } = useLanguage()
+  const [isOpen, setIsOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
 
-  // Add backdrop-blur once user scrolls past 20px
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
+    const handleScroll = () => setScrolled(window.scrollY > 8)
+    handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Close mobile menu on route change
-  useEffect(() => { setIsOpen(false) }, [pathname])
+  useEffect(() => {
+    setIsOpen(false)
+  }, [pathname])
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-cosmic-deep/90 backdrop-blur-md border-b border-cosmic-border shadow-[0_2px_20px_rgba(0,0,0,0.4)]'
-          : 'bg-transparent'
+      className={`fixed inset-x-0 top-0 z-50 border-b bg-cosmic-deep/95 backdrop-blur-md transition-[border-color,box-shadow] duration-300 ${
+        scrolled ? 'border-cosmic-border shadow-[0_8px_24px_-20px_rgb(var(--c-shadow)/0.5)]' : 'border-transparent'
       }`}
     >
-      <nav
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-        aria-label="Main navigation"
-      >
-        <div className="flex items-center justify-between h-16 md:h-20">
-
-          {/* ── Logo ─────────────────────────────────────────────────────── */}
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 group focus-visible:outline-gold-bright"
-          >
-            <div className="relative w-12 h-12 sm:w-14 sm:h-14">
-              <Image
-                src="/images/logo.png"
-                alt="SaiBaba Astro Logo"
-                fill
-                sizes="(max-width: 640px) 48px, 56px"
-                className="object-contain"
-              />
-            </div>
-            <span className="font-serif text-xl sm:text-2xl font-bold tracking-wide whitespace-nowrap">
-              <span className="text-cream">Saibaba</span>
-              <span className="text-gradient-gold"> Astro</span>
+      <nav className="mx-auto max-w-[84rem] px-4 sm:px-6 lg:px-8" aria-label={t.nav.mainNavigation}>
+        <div className="flex h-20 items-center justify-between gap-4 2xl:gap-6">
+          {/* Brand */}
+          <Link href="/" className="flex shrink-0 items-center gap-3">
+            <span className="relative h-11 w-11 shrink-0">
+              <Image src="/images/logo.png" alt="" fill sizes="44px" className="object-contain" />
+            </span>
+            <span className="flex flex-col leading-none">
+              <span className="whitespace-nowrap font-serif text-[22px] font-semibold text-cream sm:text-[26px] xl:text-[23px] 2xl:text-[26px]">
+                Sai Baba Astrology
+              </span>
+              <span className="mt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.24em] text-gold">
+                {t.nav.brandTagline}
+              </span>
             </span>
           </Link>
 
-          {/* ── Desktop nav links ─────────────────────────────────────────── */}
-          <ul className="hidden md:flex items-center gap-1" role="list">
+          {/* Desktop links */}
+          <ul className="hidden items-center gap-4 xl:flex 2xl:gap-6" role="list">
             {NAV_LINKS.map((link) => {
-              const isActive = pathname === link.href
+              const active = isActivePath(pathname, link.href)
               return (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200
-                      focus-visible:outline-gold-bright
-                      ${isActive
-                        ? 'text-gold-bright bg-gold/10'
-                        : 'text-silver hover:text-cream hover:bg-white/5'
-                      }`}
-                    aria-current={isActive ? 'page' : undefined}
+                    aria-current={active ? 'page' : undefined}
+                    className={`relative block whitespace-nowrap py-2 text-sm font-medium transition-colors 2xl:text-[15px] ${
+                      active ? 'text-cream' : 'text-silver hover:text-cream'
+                    }`}
                   >
-                    {t.nav[link.label.toLowerCase() as keyof typeof t.nav]}
+                    {t.nav[link.key]}
+                    <span
+                      aria-hidden="true"
+                      className={`absolute inset-x-0 -bottom-0.5 h-0.5 rounded-full bg-gold-light transition-opacity ${
+                        active ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    />
                   </Link>
                 </li>
               )
             })}
           </ul>
 
-          {/* ── Desktop CTA ───────────────────────────────────────────────── */}
-          <div className="hidden md:flex items-center gap-3">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="flex items-center justify-center w-9 h-9 rounded-full border border-cosmic-border text-silver hover:text-cream hover:border-gold/40 transition-all duration-200"
-              aria-label={theme === 'dark' ? t.common.themeLight : t.common.themeDark}
-              title={theme === 'dark' ? t.common.themeLight : t.common.themeDark}
-            >
-              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setLanguageOpen((prev) => !prev)}
-                className="flex items-center gap-2 px-3 py-2 rounded-full border border-cosmic-border text-silver hover:text-cream hover:border-gold/40 transition-all duration-200"
-                aria-expanded={languageOpen}
-              >
-                <Languages className="w-4 h-4" />
-                <span className="text-sm">
-                  {language === 'kn'
-                    ? 'ಕನ್ನಡ'
-                    : language === 'te'
-                      ? 'తెలుగు'
-                      : 'English'}
-                </span>
-              </button>
-
-              {languageOpen && (
-                <div className="absolute right-0 mt-2 w-36 rounded-xl border border-cosmic-border bg-cosmic-deep shadow-xl overflow-hidden">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLanguage('en')
-                      setLanguageOpen(false)
-                    }}
-                    className="w-full text-left px-4 py-3 text-sm text-silver hover:bg-white/5 hover:text-cream"
-                  >
-                    English
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLanguage('kn')
-                      setLanguageOpen(false)
-                    }}
-                    className="w-full text-left px-4 py-3 text-sm text-silver hover:bg-white/5 hover:text-cream"
-                  >
-                    ಕನ್ನಡ
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLanguage('te')
-                      setLanguageOpen(false)
-                    }}
-                    className="w-full text-left px-4 py-3 text-sm text-silver hover:bg-white/5 hover:text-cream"
-                  >
-                    తెలుగు
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <Link
-              href="/appointment"
-              className="btn-primary text-xs px-5 py-2.5"
-            >
+          {/* Desktop controls */}
+          <div className="hidden items-center gap-2 xl:flex 2xl:gap-3">
+            <LanguageSwitch />
+            <ThemeToggle />
+            <Link href="/appointment" className="btn-primary whitespace-nowrap px-4 2xl:px-5">
               {t.nav.bookConsultation}
             </Link>
           </div>
 
-          {/* ── Mobile controls ─────────────────────────────────────────────── */}
-          <div className="md:hidden flex items-center gap-2">
-            {/* Language selector */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setLanguageOpen((prev) => !prev)}
-                className="flex items-center justify-center w-10 h-10 rounded-full border border-cosmic-border text-silver hover:text-cream hover:border-gold/40 transition-all duration-200"
-                aria-expanded={languageOpen}
-                aria-label="Change language"
-              >
-                <Languages className="w-4 h-4" />
-              </button>
-
-              {languageOpen && (
-                <div className="absolute right-0 mt-2 w-36 rounded-xl border border-cosmic-border bg-cosmic-deep shadow-xl overflow-hidden z-50">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLanguage('en')
-                      setLanguageOpen(false)
-                    }}
-                    className="w-full text-left px-4 py-3 text-sm text-silver hover:bg-white/5 hover:text-cream"
-                  >
-                    English
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLanguage('kn')
-                      setLanguageOpen(false)
-                    }}
-                    className="w-full text-left px-4 py-3 text-sm text-silver hover:bg-white/5 hover:text-cream"
-                  >
-                    ಕನ್ನಡ
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLanguage('te')
-                      setLanguageOpen(false)
-                    }}
-                    className="w-full text-left px-4 py-3 text-sm text-silver hover:bg-white/5 hover:text-cream"
-                  >
-                    తెలుగు
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Menu toggle */}
+          {/* Mobile controls */}
+          <div className="flex items-center gap-2 xl:hidden">
+            <ThemeToggle />
             <button
               type="button"
               onClick={() => setIsOpen((prev) => !prev)}
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-cosmic-border text-silver hover:text-cream hover:border-violet/40 transition-all duration-200 focus-visible:outline-gold-bright"
-              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              className="flex h-11 w-11 items-center justify-center rounded-lg border border-cosmic-border text-cream transition-colors hover:border-gold-light"
+              aria-label={isOpen ? t.nav.closeMenu : t.nav.openMenu}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
             >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* ── Mobile menu drawer ──────────────────────────────────────────────── */}
+      {/* Mobile drawer */}
       <div
         id="mobile-menu"
-        className={`md:hidden overflow-y-auto overscroll-contain transition-all duration-300 ease-in-out ${
-          isOpen ? 'max-h-[calc(100dvh-4rem)] opacity-100' : 'max-h-0 opacity-0'
+        className={`overflow-y-auto overscroll-contain transition-[max-height,opacity] duration-300 ease-in-out xl:hidden ${
+          isOpen ? 'max-h-[calc(100dvh-5rem)] opacity-100' : 'max-h-0 opacity-0'
         }`}
         aria-hidden={!isOpen}
       >
-        <div className="glass border-t border-cosmic-border px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <ul className="flex flex-col gap-1" role="list">
+        <div className="border-t border-cosmic-border bg-cosmic-deep px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-6">
+          <ul className="flex flex-col" role="list">
             {NAV_LINKS.map((link) => {
-              const isActive = pathname === link.href
+              const active = isActivePath(pathname, link.href)
               return (
-                <li key={link.href}>
+                <li key={link.href} className="border-b border-cosmic-border last:border-b-0">
                   <Link
                     href={link.href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
-                      ${isActive
-                        ? 'text-gold-bright bg-gold/10 border border-gold/20'
-                        : 'text-silver hover:text-cream hover:bg-white/5'
-                      }`}
-                    aria-current={isActive ? 'page' : undefined}
+                    aria-current={active ? 'page' : undefined}
                     tabIndex={isOpen ? 0 : -1}
+                    className={`flex min-h-[52px] items-center justify-between text-base font-medium ${
+                      active ? 'text-cream' : 'text-silver'
+                    }`}
                   >
-                    {isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-gold-bright" aria-hidden="true" />
-                    )}
-                    {t.nav[link.label.toLowerCase() as keyof typeof t.nav]}
+                    {t.nav[link.key]}
+                    {active && <span className="h-1.5 w-1.5 rotate-45 bg-gold-light" aria-hidden="true" />}
                   </Link>
                 </li>
               )
             })}
           </ul>
-          <div className="mt-4 pt-4 border-t border-cosmic-border">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="btn-ghost w-full justify-center text-sm mb-2"
-              tabIndex={isOpen ? 0 : -1}
-              aria-label={theme === 'dark' ? t.common.themeLight : t.common.themeDark}
-            >
-              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              {theme === 'dark' ? t.common.themeLight : t.common.themeDark}
-            </button>
-            <Link
-              href="/appointment"
-              className="btn-primary w-full justify-center text-sm"
-              tabIndex={isOpen ? 0 : -1}
-            >
+          <div className="mt-4 flex flex-col gap-3 border-t border-cosmic-border pt-4">
+            <LanguageSwitch className="self-start" tabIndex={isOpen ? 0 : -1} />
+            <Link href="/appointment" className="btn-primary w-full" tabIndex={isOpen ? 0 : -1}>
               {t.nav.bookConsultation}
             </Link>
           </div>

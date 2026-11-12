@@ -16,7 +16,7 @@ export default function Card({
 }: CardProps) {
   const base = variant === 'feature' ? 'card-feature' : 'card-cosmic'
   const accentClass = accent
-    ? 'before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:rounded-t-2xl before:bg-gradient-to-r before:from-transparent before:via-gold before:to-transparent'
+    ? 'before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:rounded-t-2xl before:bg-gold-light/60'
     : ''
 
   return (
