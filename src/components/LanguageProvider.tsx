@@ -66,11 +66,14 @@ export function LanguageProvider({
   // Kannada is the default language
   const [language, setLanguageState] = useState<Language>('kn')
 
-  // Load previously selected language
+  // Every new visit opens in Kannada. A language picked during the visit is
+  // kept only for this tab (sessionStorage), so a reload keeps it but opening
+  // the site again starts in Kannada.
   useEffect(() => {
     let savedLanguage: string | null = null
     try {
-      savedLanguage = localStorage.getItem('astro-language')
+      localStorage.removeItem('astro-language') // old per-browser setting
+      savedLanguage = sessionStorage.getItem('astro-language')
     } catch {
       // storage blocked: keep the default
     }
@@ -93,7 +96,7 @@ export function LanguageProvider({
   const setLanguage = (newLanguage: Language) => {
     setLanguageState(newLanguage)
     try {
-      localStorage.setItem('astro-language', newLanguage)
+      sessionStorage.setItem('astro-language', newLanguage)
     } catch {
       // storage blocked: the choice still applies for this visit
     }
