@@ -1,8 +1,11 @@
 import Link from 'next/link'
-import { format, parseISO } from 'date-fns'
+import { parseISO } from 'date-fns'
 import { CheckCircle2, CalendarDays, Clock, Star, Home, RotateCcw } from 'lucide-react'
 import { formatTimeSlot } from '@/lib/appointment-utils'
 import { useLanguage } from '@/components/LanguageProvider'
+import { CONTACT } from '@/lib/contact-info'
+import { formatBookingDate } from '@/lib/date-locale'
+import { localizeServiceName } from '@/lib/booking-service-translations'
 
 interface BookingConfirmationProps {
   service: string
@@ -21,8 +24,9 @@ export default function BookingConfirmation({
   email,
   onBookAnother,
 }: BookingConfirmationProps) {
-  const { t } = useLanguage()
-  const formattedDate = format(parseISO(date), 'EEEE, d MMMM yyyy')
+  const { t, language } = useLanguage()
+  const formattedDate = formatBookingDate(parseISO(date), language)
+  const [thanksBefore, thanksAfter = ''] = t.common.bookingThanks.split('{name}')
   const formattedTime = formatTimeSlot(time)
 
   return (
@@ -57,20 +61,21 @@ export default function BookingConfirmation({
       {/* Heading */}
       <div className="flex flex-col gap-2">
         <h3 className="heading-serif text-2xl sm:text-3xl font-bold">
-          {t.common.appointmentForm}{' '}
-          <span className="text-gradient-gold">{t.common.messageReceived}</span>
+          {t.common.bookingReceivedTitle}
         </h3>
         <p className="text-silver text-sm max-w-sm leading-relaxed">
-          {t.common.thankYouMessage} <strong className="text-cream">{name}</strong>{' '}
-          <strong className="text-cream">{email}</strong>
+          {thanksBefore}
+          <strong className="text-cream">{name}</strong>
+          {thanksAfter}
         </p>
+        <p className="text-muted text-xs">{email}</p>
       </div>
 
       {/* Booking details card */}
       <div className="w-full max-w-sm glass rounded-2xl border border-violet/30 p-5 text-left flex flex-col gap-3">
         <div className="flex items-center gap-2 pb-2 border-b border-cosmic-border">
           <Star className="w-4 h-4 text-gold-bright" aria-hidden="true" />
-          <span className="text-cream text-sm font-semibold">{service}</span>
+          <span className="text-cream text-sm font-semibold">{localizeServiceName(service, language)}</span>
         </div>
         <div className="flex items-center gap-2 text-sm text-silver">
           <CalendarDays className="w-4 h-4 text-violet-bright shrink-0" aria-hidden="true" />
@@ -86,11 +91,14 @@ export default function BookingConfirmation({
       </div>
 
       <p className="text-muted text-xs max-w-sm leading-relaxed">
-        {t.home.getInTouch}{' '}
-        <a href="mailto:hello@saibabaastro.com" className="text-gold-bright hover:underline">
-          hello@saibabaastro.com
-        </a>{' '}
-        with your booking details.
+        {t.common.bookingQuestions}{' '}
+        <a href={`mailto:${CONTACT.email}`} className="text-gold-bright hover:underline">
+          {CONTACT.email}
+        </a>
+        {' · '}
+        <a href={CONTACT.phoneHref} className="text-gold-bright hover:underline whitespace-nowrap">
+          {CONTACT.phoneDisplay}
+        </a>
       </p>
 
       {/* Action buttons */}

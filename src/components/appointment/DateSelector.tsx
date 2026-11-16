@@ -13,6 +13,7 @@ import {
 } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLanguage } from '@/components/LanguageProvider'
+import { formatLocalDate } from '@/lib/date-locale'
 
 interface DateSelectorProps {
   selected: string          // YYYY-MM-DD or ''
@@ -22,7 +23,8 @@ interface DateSelectorProps {
   onNextMonth: () => void
 }
 
-const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+// A week that starts on Sunday (1–7 January 2023), used to name the weekdays.
+const WEEK = Array.from({ length: 7 }, (_, i) => new Date(2023, 0, 1 + i))
 const today = startOfDay(new Date())
 // Allow bookings up to 90 days ahead
 const maxDate = addDays(today, 90)
@@ -34,7 +36,8 @@ export default function DateSelector({
   onPrevMonth,
   onNextMonth,
 }: DateSelectorProps) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+  const monthLabel = formatLocalDate(viewMonth, language, { month: 'long', year: 'numeric' })
   const monthStart = startOfMonth(viewMonth)
   const monthEnd   = endOfMonth(viewMonth)
   const days       = eachDayOfInterval({ start: monthStart, end: monthEnd })
@@ -58,20 +61,20 @@ export default function DateSelector({
           type="button"
           onClick={onPrevMonth}
           disabled={!canGoPrev}
-          aria-label={t.common.back}
+          aria-label={t.common.previousMonth}
           className="w-8 h-8 rounded-full border border-cosmic-border flex items-center justify-center text-silver hover:text-cream hover:border-violet/40 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-gold-bright"
         >
           <ChevronLeft className="w-4 h-4" aria-hidden="true" />
         </button>
 
         <h3 className="font-serif text-cream font-semibold text-sm">
-          {format(viewMonth, 'MMMM yyyy')}
+          {monthLabel}
         </h3>
 
         <button
           type="button"
           onClick={onNextMonth}
-          aria-label={t.common.continue}
+          aria-label={t.common.nextMonth}
           className="w-8 h-8 rounded-full border border-cosmic-border flex items-center justify-center text-silver hover:text-cream hover:border-violet/40 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-gold-bright"
         >
           <ChevronRight className="w-4 h-4" aria-hidden="true" />
@@ -80,14 +83,14 @@ export default function DateSelector({
 
       {/* Day-of-week headers */}
       <div className="grid grid-cols-7 gap-1" role="row">
-        {DAY_LABELS.map((d) => (
+        {WEEK.map((day) => (
           <div
-            key={d}
+            key={day.getDay()}
             className="text-center text-[10px] font-semibold text-muted uppercase tracking-widest py-1"
             role="columnheader"
-            aria-label={d}
+            aria-label={formatLocalDate(day, language, { weekday: 'long' })}
           >
-            {d}
+            {formatLocalDate(day, language, { weekday: 'short' })}
           </div>
         ))}
       </div>
@@ -96,7 +99,7 @@ export default function DateSelector({
       <div
         className="grid grid-cols-7 gap-1"
         role="grid"
-        aria-label={`${format(viewMonth, 'MMMM yyyy')} calendar`}
+        aria-label={monthLabel}
       >
         {/* Leading blanks */}
         {Array.from({ length: leadingBlanks }).map((_, i) => (
@@ -117,7 +120,7 @@ export default function DateSelector({
                 type="button"
                 disabled={isDisabled}
                 onClick={() => !isDisabled && onSelect(dateStr)}
-                aria-label={format(day, 'EEEE, MMMM d, yyyy')}
+                aria-label={formatLocalDate(day, language, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
                 aria-pressed={isSelected}
                 aria-disabled={isDisabled}
                 className={`
@@ -146,15 +149,15 @@ export default function DateSelector({
       <div className="flex items-center gap-4 text-[10px] text-muted mt-1">
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-gold inline-block" aria-hidden="true" />
-          Selected
+          {t.common.calendarSelected}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm border border-violet/60 inline-block" aria-hidden="true" />
-          Today
+          {t.common.calendarToday}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-muted/10 inline-block" aria-hidden="true" />
-          Unavailable
+          {t.common.calendarUnavailable}
         </span>
       </div>
     </div>

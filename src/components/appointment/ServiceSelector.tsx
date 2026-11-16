@@ -2,6 +2,7 @@ import { Check } from 'lucide-react'
 import { STATIC_PRODUCTS } from '@/lib/shop-data'
 import type { AvailableService } from '@/lib/validations'
 import { useLanguage } from '@/components/LanguageProvider'
+import { localizeService } from '@/lib/booking-service-translations'
 
 interface ServiceSelectorProps {
   selected: AvailableService | ''
@@ -9,13 +10,14 @@ interface ServiceSelectorProps {
 }
 
 export default function ServiceSelector({ selected, onSelect }: ServiceSelectorProps) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   return (
     <fieldset className="border-none p-0 m-0">
       <legend className="sr-only">{t.common.selectService}</legend>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {STATIC_PRODUCTS.map((product) => {
           const isSelected = selected === product.name
+          const copy = localizeService(product, language)
 
           return (
             <button
@@ -48,10 +50,10 @@ export default function ServiceSelector({ selected, onSelect }: ServiceSelectorP
 
                 <div className="flex flex-col gap-1 min-w-0 flex-1 pr-6">
                   <span className={`font-serif font-semibold text-sm leading-snug ${isSelected ? 'text-gold-bright' : 'text-cream'}`}>
-                    {product.name}
+                    {copy.name}
                   </span>
                   <span className="text-muted text-xs leading-relaxed line-clamp-2">
-                    {product.description}
+                    {copy.description}
                   </span>
                   <span className={`font-serif font-bold text-sm mt-1 ${isSelected ? 'text-gradient-gold' : 'text-gold-bright'}`}>
                     ₹{product.price.toLocaleString('en-IN')}

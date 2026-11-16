@@ -445,7 +445,7 @@ export default function AppointmentForm({ preselectedService }: AppointmentFormP
                 <textarea
                   id="appt-notes"
                   rows={4}
-                  placeholder={t.home.astrologyDescription}
+                  placeholder={t.common.bookingNotesPlaceholder}
                   aria-invalid={!!errors.notes}
                   aria-describedby={errors.notes ? 'appt-notes-err' : undefined}
                   className="input-cosmic resize-none"

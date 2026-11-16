@@ -43,8 +43,8 @@ export default function TimeSlotSelector({
           const isSelected = selected === slot
 
           let statusLabel = ''
-          if (isBooked) statusLabel = ' (fully booked)'
-          else if (isPast) statusLabel = ' (past)'
+          if (isBooked) statusLabel = ` (${t.common.slotBooked})`
+          else if (isPast) statusLabel = ` (${t.common.slotPast})`
 
           return (
             <button
@@ -70,7 +70,7 @@ export default function TimeSlotSelector({
               {formatTimeSlot(slot)}
               {isBooked && (
                 <span className="block text-[10px] text-muted/50 mt-0.5 normal-case no-underline">
-                  Booked
+                  {t.common.slotBooked}
                 </span>
               )}
             </button>
@@ -80,7 +80,7 @@ export default function TimeSlotSelector({
 
       {bookedSlots.length > 0 && (
         <p className="text-xs text-muted">
-          Booked slots are shown but cannot be selected. Please choose an available time.
+          {t.common.bookedSlotsNote}
         </p>
       )}
     </div>

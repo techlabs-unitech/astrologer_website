@@ -1,8 +1,10 @@
-import { format, parseISO } from 'date-fns'
+import { parseISO } from 'date-fns'
 import { CalendarDays, Clock, User, Mail, Phone, FileText, Star } from 'lucide-react'
 import { formatTimeSlot } from '@/lib/appointment-utils'
 import { STATIC_PRODUCTS } from '@/lib/shop-data'
 import { useLanguage } from '@/components/LanguageProvider'
+import { formatBookingDate } from '@/lib/date-locale'
+import { localizeServiceName } from '@/lib/booking-service-translations'
 
 interface BookingSummaryProps {
   service: string
@@ -53,9 +55,9 @@ export default function BookingSummary({
   submitting,
   error,
 }: BookingSummaryProps) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const product = STATIC_PRODUCTS.find((p) => p.name === service)
-  const formattedDate = format(parseISO(date), 'EEEE, d MMMM yyyy')
+  const formattedDate = formatBookingDate(parseISO(date), language)
   const formattedTime = formatTimeSlot(time)
 
   return (
@@ -69,7 +71,7 @@ export default function BookingSummary({
             </div>
             <div>
               <p className="text-muted text-[10px] uppercase tracking-widest mb-0.5">{t.common.service}</p>
-              <p className="text-cream font-serif font-semibold text-base leading-tight">{service}</p>
+              <p className="text-cream font-serif font-semibold text-base leading-tight">{localizeServiceName(service, language)}</p>
             </div>
           </div>
           {product && (
